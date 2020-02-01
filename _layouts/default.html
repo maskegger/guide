@@ -13,7 +13,9 @@
     <![endif]-->
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
 
+	{% include css.html %}
   </head>
+  
   <body>
 
       <header>
@@ -46,9 +48,11 @@
 
       </section>
       <footer>
+		<!--
         {% if site.github.is_project_page %}
           <p>Project maintained by <a href="{{ site.github.owner_url }}">{{ site.github.owner_name }}</a></p>
         {% endif %}
+		-->
         <p><small>{{ page.title | default: site.title }} <br><a href="http://julianreif.com/">Julian Reif</a></small></p>
       </footer>
     </div>

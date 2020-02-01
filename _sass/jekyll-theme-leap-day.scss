@@ -287,12 +287,12 @@ small {
 }
 
 nav {
-  width: 230px;
+  width: 270px;
   position: fixed;
   top: 220px;
   left:50%;
   margin-left:-580px;
-  text-align: right;
+  text-align: left;
 
   ul {
     list-style: none;
@@ -321,6 +321,7 @@ nav {
       }
 
       &.tag-h2 {
+	    text-indent: 1em;
 
         + .tag-h1 {
           margin-top:10px;
@@ -334,10 +335,10 @@ nav {
       &:hover { color: #999; }
     }
 
-    // .active {
-    //   border-right:solid 4px #39C;
-    //   padding-right:13px;
-    // }
+     //.active {
+     //  border-right:solid 4px #39C;
+     //  padding-right:13px;
+     // }
   }
 }
 
