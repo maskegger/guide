@@ -60,6 +60,8 @@ In this example I have defined the location of only one project, `MyProject`. In
 
 ## *R* profile
 
+I write more than 99% of my code Stata, including C++ plugins such as [strgroup](https://github.com/reifjulian/strgroup). On occasion, I will make use of a routine in *R* that is not available in Stata (e.g., [XGBoost](https://xgboost.readthedocs.io/en/latest/)). It is therefore convenient to setup an *R* environment that is consistent with the Stata environment. 
+
 *R* automatically runs `Rprofile.site` upon launch. On Windows, this file is located in the `C:/Program Files/R/R-n.n.n/etc` directory.  Alternatively you can store these settings in .Rprofile, which is run after Rprofile.site. Type `.libPaths()` at the R prompt to view a list of the paths for your particular computer.
 
 ```R
@@ -198,10 +200,10 @@ Never use hard-coded paths like `C:/Users/jreif/Dropbox/MyProject`. All pathname
 Include `set varabbrev off` in your Stata profile.  Most professional Stata programmers I know do this in order to avoid unexpected behaviors such as [this](https://www.ifs.org.uk/docs/stata_gotchasJan2014.pdf).
 
 Sometimes an analysis will produce different results each time you run it. Here are two common reasons why this happens:
-1. One of your commands requires randon numbers and you forgot to use `set seed #`
+1. One of your commands requires random numbers and you forgot to use `set seed #`
 1. You have a nonunique sort. Add `isid` checks to your code prior to sorting to ensure uniqueness. (Another option is to add the `unique` option to your sorts.) Nonunique sorts can be hard to predict:
-```stata
 
+```stata
 * The random variable r here is not unique, because Stata's default type (float) does not have enough precision when N=100,000. (isid will generate an error, unless you have changed Stata's default type to double)
 clear
 set seed 100
@@ -235,4 +237,4 @@ isid r
 # Acknowledgments
 -----------
 
-The coding practices outlined in this guide have been developed and improved over many years. I would especially like to thank my frequent collaborators Tatyana Deryugina and David Molitor for providing many helpful suggestions that have improved my project organization over the years.
+The coding practices outlined in this guide have been developed and improved over many years. I would especially like to thank my frequent collaborators Tatyana Deryugina and David Molitor for providing many helpful suggestions that have improved my project organization over the years. I also thank Grant McDermott for helpful conversations regarding version control and reproducibility in *R*.
