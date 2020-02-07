@@ -1,59 +1,61 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="{{ site.lang | default: "en-US" }}">
+
   <head>
-    <meta charset="utf-8">
+    <meta charset='utf-8'>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,maximum-scale=2">
+    <link rel="stylesheet" type="text/css" media="screen" href="{{ '/assets/css/style.css?v=' | append: site.github.build_revision | relative_url }}">
 
 {% seo %}
-    <link rel="stylesheet" href="{{ '/assets/css/style.css?v=' | append: site.github.build_revision | relative_url }}">
-    <script src="https://code.jquery.com/jquery-3.3.0.min.js" integrity="sha256-RTQy8VOmNlT6b2PIRur37p6JEBZUE7o8wPgMvu18MC4=" crossorigin="anonymous"></script>
-    <script src="{{ '/assets/js/main.js' | relative_url }}"></script>
-    <!--[if lt IE 9]>
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js" integrity="sha256-3Jy/GbSLrg0o9y5Z5n1uw0qxZECH7C6OQpVBgNFYa0g=" crossorigin="anonymous"></script>
-    <![endif]-->
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-
-	{% include css.html %}
+{% include css.html %}
   </head>
-  
+
   <body>
 
-      <header>
-        <h1>{{ page.title | default: site.title | default: site.github.repository_name }}</h1>
-        <p>{{ page.description | default: site.description | default: site.github.project_tagline }}</p>
-      </header>
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
 
-	  {% if site.show_downloads %}
-      <div id="banner">
-        <span id="logo"></span>
-
-        <a href="https://github.com/reifjulian/coding-example" class="button fork"><strong>Example code</strong></a>
-        
-          <div class="downloads">
-            <span>Downloads:</span>
-            <ul>
-              <li><a href="https://github.com/reifjulian/coding-example/archive/master.zip" class="button">ZIP</a></li>
-            </ul>
+          <div class="header_container">
+            <h1 id="project_title">{{ site.title | default: site.github.repository_name }}</h1>
+            <h2 id="project_tagline">{{ site.description | default: site.github.project_tagline }}</h2>
           </div>
-        
-      </div><!-- end banner -->
-	  {% endif %}
+          <nav id="header_nav">
+            {% if site.github.is_project_page %}
+              <a id="forkme_banner" href="{{ site.github.repository_url }}">View on GitHub</a>
+            {% endif %}
 
-    <div class="wrapper">
-      <nav>
-        <ul></ul>
+            {% if site.show_downloads %}
+              <div id="downloads">
+                <a class="zip_download_link" href="{{ site.github.zip_url }}">Download this project as a .zip file</a>
+                <a class="tar_download_link" href="{{ site.github.tar_url }}">Download this project as a tar.gz file</a>
+              </div>
+            {% endif %}
+          </nav>
+
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <nav id="main_nav">
+        <div>
+        </div>
       </nav>
-      <section>
-        {{ content }}
 
+      <section id="main_content" class="inner">
+        {{ content }}
       </section>
-      <footer>
-		<!--
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
         {% if site.github.is_project_page %}
-          <p>Project maintained by <a href="{{ site.github.owner_url }}">{{ site.github.owner_name }}</a></p>
+        <p class="copyright">{{ site.title | default: site.github.repository_name }} maintained by <a href="{{ site.github.owner_url }}">{{ site.github.owner_name }}</a></p>
         {% endif %}
-		-->
-        <p><small>{{ page.title | default: site.title }} <br><a href="http://julianreif.com/">Julian Reif</a></small></p>
+        <p>Published with <a href="https://pages.github.com">GitHub Pages</a></p>
       </footer>
     </div>
 
@@ -67,5 +69,39 @@
         ga('send', 'pageview');
       </script>
     {% endif %}
+
+    <script>
+      //Code to automatically create the side nav based on content
+      //note that this code works for only h1, h2, and h3 tags specified in content and other low level heading tags are not considered.
+      let h1 = document.getElementsByTagName("h1");
+      let h2 = document.getElementsByTagName("h2");
+      let h3 = document.getElementsByTagName("h3");
+
+      function objectToArray(object) {
+        let array = [];
+        let i = 0;
+        while(object[i] != undefined) {
+          array.push(object[i]);
+          i++
+        }
+        return array;
+      }
+
+      function addElement(heading) {
+        let nav = document.getElementById("main_nav").firstElementChild;
+        let anchor = document.createElement("a");
+        anchor.textContent = heading.textContent;
+        if (heading.tagName == "H1") {
+          anchor.setAttribute("class", "main_nav_h1");
+        }
+        let anchorText = heading.textContent.split(" ").join("_").toLowerCase();
+        heading.setAttribute("id", `${anchorText}`);
+        anchor.setAttribute("href", `#${anchorText}`)
+        nav.append(anchor);
+      }
+
+      let headings = objectToArray(h1).slice(1).concat(objectToArray(h2).slice(1)).concat(objectToArray(h3));// .slice makes sure the first and second headings of the file (which are the main headings) are not considered
+      headings.forEach(heading => addElement(heading));
+    </script>
   </body>
 </html>

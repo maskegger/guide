@@ -2,12 +2,12 @@ title: Stata Coding Guide
 description: Guide for Stata coding
 show_downloads: true
 google_analytics:
-theme: jekyll-theme-leap-day
+theme: jekyll-theme-slate
 
 markdown: kramdown
 
 # Code to disable rouge
-#kramdown:
-#  syntax_highlighter_opts:
-#    disable : true
+kramdown:
+  syntax_highlighter_opts:
+    disable : true
 
