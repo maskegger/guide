@@ -73,19 +73,26 @@
     <script>
       //Code to automatically create the side nav based on content
       //note that this code works for only h1, h2, and h3 tags specified in content and other low level heading tags are not considered.
-      let h1 = document.getElementsByTagName("h1");
-      let h2 = document.getElementsByTagName("h2");
-      let h3 = document.getElementsByTagName("h3");
 
-      function objectToArray(object) {
-        let array = [];
-        let i = 0;
-        while(object[i] != undefined) {
-          array.push(object[i]);
-          i++
+      let domElements = document.getElementsByTagName("*");
+      let headings = [];
+
+      let count = [0, 0];//serves so the real title headings (the first h1 and h2) of the code are not considered
+      for (let element of domElements) {
+        if (["H1", "H2", "H3"].indexOf(element.tagName) != -1) {
+          if (count[0] === 0 && element.tagName === "H1") {
+            count[0] = 1;
+            continue;
+          } else if (count[1] === 0 && element.tagName === "H2") {
+            count[1] = 1;
+            continue;
+          } else {
+            headings.push(element);
+          }
         }
-        return array;
       }
+
+      headings.forEach(heading => addElement(heading));
 
       function addElement(heading) {
         let nav = document.getElementById("main_nav").firstElementChild;
@@ -99,9 +106,6 @@
         anchor.setAttribute("href", `#${anchorText}`)
         nav.append(anchor);
       }
-
-      let headings = objectToArray(h1).slice(1).concat(objectToArray(h2).slice(1)).concat(objectToArray(h3));// .slice makes sure the first and second headings of the file (which are the main headings) are not considered
-      headings.forEach(heading => addElement(heading));
     </script>
   </body>
 </html>
