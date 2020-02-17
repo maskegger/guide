@@ -10,7 +10,7 @@ This guide describes how to put together a "push-button" publication-quality ana
 1. Provide seamless integration with supporting *R* analyses
 1. Produce a replication folder suitable for publication
 
-As part of this guide, I created a comprehensive template that includes an example paper along with an accompanying replication package, available [here](https://github.com/reifjulian/coding-example). Try it out and see how easy (or not!) it is for you to reproduce my example analysis. If you encounter problems let me know.
+As part of this guide, I created a comprehensive template that includes an example paper along with an accompanying replication package, available [here](https://github.com/reifjulian/my-project). Try it out and see how easy (or not!) it is for you to reproduce my example analysis. If you encounter problems let me know.
 
 
 The rest of this guide explains the logic behind the organization of this template and provides instructions for how to set up a robust environment for your Stata projects.
