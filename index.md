@@ -21,7 +21,7 @@ The rest of this guide explains the logic behind the organization of this templa
 -->
 
 
-# Setting up your environment
+#1. Setting up your environment
 -----------
 
 I generally work on many projects at the same time and access them from different computers (laptop, home, work, etc.). A working project needs to be synced across my computers, and the analysis code must allow the project folder to have a different path on the different computers.  
