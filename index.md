@@ -34,9 +34,11 @@ I use Dropbox to sync my projects across different computers. Dropbox has severa
 
 Stata automatically runs **profile.do** upon launch.
 
-`profile.do` must be stored in one of the paths searched by Stata. Type `adopath` at the Stata prompt to view a list of the paths for your particular computer.
+<img src="/assets/guide/stata_profile.PNG" width="100%" title="Stata profile">
 
-Here is my Stata profile, stored in `C:/ado/personal/profile.do`:
+**profile.do** must be stored in one of the paths searched by Stata. Type `adopath` at the Stata prompt to view a list of the paths for your particular computer.
+
+Here is my Stata profile, stored in **C:/ado/personal/profile.do**:
 ```stata
 * Settings specific to local environment
 global DROPBOX "C:/Users/jreif/Dropbox"
@@ -46,23 +48,20 @@ global RSCRIPT_PATH "C:/Program Files/R/R-3.6.2/bin/x64/Rscript.exe"
 run "$DROPBOX/stata_profile.do"
 ```
 
-This file contains settings specific to my computer, such as the location of Dropbox and my *R* installation. I could define my project directories here. But instead, I store those in `$DROPBOX/stata_profile.do`, along with any other settings that are common across my computers:
+This file contains settings specific to my computer, such as the location of Dropbox and my *R* installation. I could define my project directories here. But instead, I store those in **$DROPBOX/stata_profile.do**, along with any other settings that are common across my computers:
 
 ```stata
 set varabbrev off
-global MyProject "$DROPBOX/my_project"
+global MyProject "$DROPBOX/my-project/MyProject"
 ```
 
-In this example I have defined the location of only one project, `MyProject`. In practice I have a large number of globals defined here, one for every project I am working on. Whenever I start a new project, I define a new global for it and add it to `$DROPBOX/stata_profile.do`. Because all my computers are synced to Dropbox, I only have to do this once.
-
-*Stata runs your profile automatically on startup*<br>
-<img src="/assets/guide/stata_profile.PNG" width="50%" title="Stata profile">
+In this example I have defined the location of only one project, `MyProject`. In practice I have a large number of globals defined here, one for every project I am working on. Whenever I start a new project, I define a new global for it and add it to **$DROPBOX/stata_profile.do**. Because all my computers are synced to Dropbox, I only have to do this once.
 
 ## *R* profile
 
-I write more than 99% of my code Stata, including C++ plugins such as [strgroup](https://github.com/reifjulian/strgroup). On occasion, I will make use of a routine in *R* that is not available in Stata (e.g., [XGBoost](https://xgboost.readthedocs.io/en/latest/)). It is therefore convenient to setup an *R* environment that is consistent with the Stata environment. 
+I write more than 99% of my code Stata, including C++ plugins such as [strgroup](https://github.com/reifjulian/strgroup). On occasion, I will make use of an *R* function that is not available in Stata (e.g., [XGBoost](https://xgboost.readthedocs.io/en/latest/)). It is therefore convenient to setup an *R* environment that is consistent with the Stata environment.
 
-*R* automatically runs `Rprofile.site` upon launch. On Windows, this file is located in the `C:/Program Files/R/R-n.n.n/etc` directory.  Alternatively you can store these settings in .Rprofile, which is run after Rprofile.site. Type `.libPaths()` at the R prompt to view a list of the paths for your particular computer.
+*R* automatically runs **Rprofile.site** upon launch. On Windows, this file is located in the **C:/Program Files/R/R-n.n.n/etc** directory.  Alternatively you can store these settings in .Rprofile, which is run after Rprofile.site. Type `.libPaths()` at the R prompt to view a list of the paths for your particular computer.
 
 ```R
 # Settings specific to local environment
@@ -72,8 +71,11 @@ Sys.setenv(DROPBOX = "C:/Users/jreif/Dropbox")
 source(file.path(Sys.getenv("DROPBOX"), "R_profile.R"))
 ```
 
-Store your general *R* settings on Dropbox. Store this file `R_profile.R` at the top level of your Dropbox folder. Define the paths for all your projects here. In this example, we have defined the location for one project, `MyProject`.
+Store your general *R* settings on Dropbox. Store this file, **R_profile.R**, at the top level of your Dropbox folder. Define the paths for all your projects here. Here is an example that defines the location for one project, `MyProject`:
 
+```R
+Sys.setenv(MyProject = file.path(Sys.getenv("DROPBOX"), "my-project/MyProject"))
+```
 
 # Organizing the project
 -----------
