@@ -370,7 +370,7 @@ Full-Width Styles
   position: absolute;
   top: 0;
   bottom: 8em;
-  left: 2vw;
+  left: 8vw;
   right: calc(((100vw - 640px) / 2) + 670px);
   padding-top: 4em;
 }
@@ -384,7 +384,8 @@ Full-Width Styles
 
 #main_nav a {
   display: block;
-  text-align: right;
+  text-align: left;
+  text-indent: 1.25em;
   padding: .5em 0;
   padding-right: .5em;
   color: #444;
@@ -405,6 +406,7 @@ Full-Width Styles
 #main_nav .main_nav_h1 {
   font-size: 1.2em;
   font-weight: bold;
+  text-indent: 0px;
 }
 
 
