@@ -1,10 +1,18 @@
 title: Stata Coding Guide
 description: Guide for Stata coding
+author: Julian Reif
 show_downloads: true
 google_analytics:
 theme: jekyll-theme-slate
 
+github: https://github.com/reifjulian
+github_username: reifjulian
 markdown: kramdown
+
+share:
+  twitter_username: julianreif
+  fb_appid: 000000000000
+
 
 # Code to disable rouge
 kramdown:
