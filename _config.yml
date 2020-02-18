@@ -4,6 +4,7 @@ show_downloads: true
 google_analytics:
 theme: jekyll-theme-slate
 
+baseurl: "/guide"
 markdown: kramdown
 
 # Code to disable rouge
