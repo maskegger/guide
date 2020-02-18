@@ -34,7 +34,7 @@ I use Dropbox to sync my projects across different computers. Dropbox has severa
 
 Stata automatically runs **profile.do** upon launch (if found).
 
-<img src="guide/assets/guide/stata_profile.PNG" width="100%" title="Stata profile">
+<img src="https://github.com/reifjulian/guide/assets/guide/stata_profile.PNG" width="100%" title="Stata profile">
 
 **profile.do** must be stored in one of the paths searched by Stata. Type `adopath` at the Stata prompt to view a list of the eligible paths for your particular computer.
 
