@@ -54,7 +54,7 @@ set varabbrev off
 global MyProject "$DROPBOX/my-project/MyProject"
 ```
 
-In this example I have defined the location of only one project, `MyProject`. In practice I have a large number of globals defined here, one for every project I am working on. Whenever I start a new project, I define a new global for it and add it to **$DROPBOX/stata_profile.do**. Because all my computers are synced to Dropbox, I only have to do this once.
+In this example I have defined the location of only one project, [MyProject](https://github.com/reifjulian/my-project/tree/master/MyProject), which was stored at the top level of my Dropbox directory. In practice my Stata profile defines a large number of globals, one for every project I am working on. Whenever I start a new project, I define a new global for it and add it to **$DROPBOX/stata_profile.do**. Because all my computers are synced to Dropbox, I only have to do this once.
 
 ## *R* profile
 
@@ -162,7 +162,7 @@ If replication of the **R** code is very important, you may want to look into [p
     └── scripts/
         ├── functions/
         └── libraries/
-			├── R/
+    	    ├── R/
     	    └── stata/
 ```
 
@@ -178,7 +178,7 @@ Follow these steps before publishing your code to ensure replication.
   1. **Clear** instructions for how to run the analysis. If the analysis cannot be run--because the data are proprietary, for example--this should be noted.
   1. Description of where the output is stored
 
-1. Remove **_install_stata_packages.do**** from the **scripts/** folder.
+1. Remove **_install_stata_packages.do** from the **scripts/** folder.
 
 1. Disable all locally installed Stata programs not located in your Stata folder. (This will ensure that your analysis is actually using programs installed in your project subdirectory, rather than somewhere else on your machine.) On Windows, this can usually be done by renaming **c:/ado** to **c:/_ado**. You can test whether you succeeded as follows. Suppose you have a copy of `regsave` somewhere on your machine and also in your local project directory. Open up a new instance of Stata and type `which regsave`. Stata should report "command regsave not found". If not, Stata will tell you where the command is located, and you can then rename that folder by adding an underscore.
 
