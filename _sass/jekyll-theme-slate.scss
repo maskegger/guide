@@ -325,7 +325,7 @@ Full-Width Styles
   width: 210px;
   z-index: 10;
   bottom: -40px;
-  right: 10;
+  right: 0;
   height: 70px;
   background: url('../images/icon_download.png') no-repeat 0% 90%;
 }
@@ -338,6 +338,7 @@ Full-Width Styles
   text-indent: -5000px;
   overflow: hidden;
   background: url(../images/sprite_download.png) no-repeat bottom left;
+  margin-left: 10px;
 }
 
 .tar_download_link {
