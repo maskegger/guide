@@ -1,4 +1,4 @@
----
+﻿---
 layout: default
 title: Stata Coding Guide
 description: Julian Reif, University of Illinois
@@ -58,7 +58,7 @@ set varabbrev off
 global MyProject "$DROPBOX/research/my-project/MyProject"
 ```
 
-`set varabbrev off` is a command I want run everytime I open Stata, for reasons [I explain below](# Good coding practice). The second line defines the location of [MyProject](https://github.com/reifjulian/my-project/tree/master/MyProject), which is stored on Dropbox. In practice my Stata profile defines a large number of globals, one for every project I am working on. Whenever I start a new project, I define a new global for it and add it to **$DROPBOX/stata_profile.do**. Because all my computers are synced to Dropbox, I only have to do this once.
+`set varabbrev off` is a command I want run everytime I open Stata, for reasons [I explain below](#good_coding_practice). The second line defines the location of [MyProject](https://github.com/reifjulian/my-project/tree/master/MyProject), which is stored on Dropbox. In practice my Stata profile defines a large number of globals, one for every project I am working on. Whenever I start a new project, I define a new global for it and add it to **$DROPBOX/stata_profile.do**. Because all my computers are synced to Dropbox, I only have to do this once.
 
 ## *R* profile
 
