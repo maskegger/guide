@@ -24,7 +24,9 @@ The rest of this guide explains the logic behind the organization of this templa
 # Setting up your environment
 -----------
 
-I generally work on many projects at the same time and access them from different computers (laptop, home, work, etc.). A working project needs to be synced across my computers, and the analysis code must allow the project folder to have a different path on the different computers. Below I describe how I set up my working environment. Users are not required to do this in order to run my code. 
+I work on several projects at the same time, access them from multiple computers (laptop, home, work, etc.), and share them with multiple coauthors. This can cause problems when defining the location of a folder in code. **/Users/jreif/Documents/**
+
+A working project needs to be synced across my computers, and the analysis code must allow the project folder to have a different path on the different computers. Below I describe how I set up my working environment. Users are not required to do this in order to run my code.
 
 ## Dropbox
 
@@ -36,9 +38,9 @@ Stata automatically runs **profile.do** upon launch (if found).
 
 <img src="assets/guide/stata_profile.PNG" width="100%" title="Stata profile">
 
-**profile.do** must be stored in one of the paths searched by Stata. Type `adopath` at the Stata prompt to view a list of the eligible paths for your particular computer.
+**profile.do** must be stored in one of the paths searched by Stata. Type `adopath` at the Stata prompt to view a list of the eligible paths for your particular computer. On my mac, I store this file in **/Users/jreif/Documents/Stata/ado/personal/profile.do**. On my PC, I store it in **C:/ado/personal/profile.do**.
 
-Here is the code from my Stata profile, stored in **C:/ado/personal/profile.do**:
+Here are the contents of the Stata profile stored on my PC:
 ```stata
 * Settings specific to local environment
 global DROPBOX "C:/Users/jreif/Dropbox"
@@ -48,19 +50,21 @@ global RSCRIPT_PATH "C:/Program Files/R/R-3.6.2/bin/x64/Rscript.exe"
 run "$DROPBOX/stata_profile.do"
 ```
 
-This file contains settings specific to my local computer, namely the location of Dropbox and my *R* installation. I could define my project directories here. But instead, I store those in **$DROPBOX/stata_profile.do**, along with any other settings that are common across my computers:
+This file contains settings specific to my PC, namely the location of Dropbox and my *R* installation. The Stata profile stored on my mac is identical except that it defines different locations for DROPBOX and RSCRIPT_PATH. I could also define the locations of my project directories here. But instead, I store those on Dropbox at **$DROPBOX/stata_profile.do**, along with any other settings that are common across my computers.
+
+Here are the contents of an example Stata profile stored on Dropbox:
 ```stata
 set varabbrev off
-global MyProject "$DROPBOX/my-project/MyProject"
+global MyProject "$DROPBOX/research/my-project/MyProject"
 ```
 
-In this example I have defined the location of only one project, [MyProject](https://github.com/reifjulian/my-project/tree/master/MyProject), which was stored at the top level of my Dropbox directory. In practice my Stata profile defines a large number of globals, one for every project I am working on. Whenever I start a new project, I define a new global for it and add it to **$DROPBOX/stata_profile.do**. Because all my computers are synced to Dropbox, I only have to do this once.
+`set varabbrev off` is a command I want run everytime I open Stata, for reasons [I explain below](# Good coding practice). The second line defines the location of [MyProject](https://github.com/reifjulian/my-project/tree/master/MyProject), which is stored on Dropbox. In practice my Stata profile defines a large number of globals, one for every project I am working on. Whenever I start a new project, I define a new global for it and add it to **$DROPBOX/stata_profile.do**. Because all my computers are synced to Dropbox, I only have to do this once.
 
 ## *R* profile
 
-I write most of my code in Stata, including C++ plugins such as [strgroup](https://github.com/reifjulian/strgroup). On occasion, I will use an *R* function that is not available in Stata (e.g., [XGBoost](https://xgboost.readthedocs.io/en/latest/)). In these cases I find it convenient to setup an *R* environment that is consistent with my Stata environment.
+I write most of my code in Stata, including C++ plugins such as [strgroup](https://github.com/reifjulian/strgroup). On occasion, I will use an *R* function that is not available in Stata, such as [XGBoost](https://xgboost.readthedocs.io/en/latest/). In these cases I find it convenient to setup an *R* environment that is consistent with my Stata environment.
 
-Similar to Stata, *R* automatically runs **.Rprofile** upon launch (if found). (More background available [here](https://csgillespie.github.io/efficientR/3-3-r-startup.html#r-startup) if you're interested.) This file is typically stored in your home directory, whose location you can find by typing `normalizePath(path.expand("~"),winslash="/")` at the *R* prompt. 
+Similar to Stata, *R* automatically runs **.Rprofile** upon launch (if found). (More background available [here](https://csgillespie.github.io/efficientR/3-3-r-startup.html#r-startup) if you're interested.) This file is typically stored in your home directory, whose location you can find by typing `normalizePath(path.expand("~"),winslash="/")` at the *R* prompt.
 
 Here is the code from my *R* profile, stored in **C:/Users/jreif/Documents/.Rprofile**:
 ```R
@@ -74,7 +78,7 @@ source(file.path(Sys.getenv("DROPBOX"), "R_profile.R"))
 As with my Stata profile, my *R* profile in turn runs a second script located at the top level of my Dropbox directory. This file, **R_profile.R**, stores *R* settings common across all my computers, such as the paths for all my projects. Here is an example that defines the location for one project, `MyProject`:
 
 ```R
-Sys.setenv(MyProject = file.path(Sys.getenv("DROPBOX"), "my-project/MyProject"))
+Sys.setenv(MyProject = file.path(Sys.getenv("DROPBOX"), "research/my-project/MyProject"))
 ```
 
 # Organizing the project
@@ -186,7 +190,7 @@ Follow these steps before publishing your code to ensure replication.
 
 1. Run **0_run_all.do**, which should rerun the entire analysis and regenerate all tables and figures.
 
-1. Copy **results/figures/** and **results/tables/` to the **paper/** folder.
+1. Copy **results/figures/** and **results/tables/** to the **paper/** folder.
 
 1. Recompile the paper and double-check the numbers.
 
@@ -208,7 +212,7 @@ Sometimes an analysis will produce different results each time you run it. Here 
 1. You have a nonunique sort. Add `isid` checks to your code prior to sorting to ensure uniqueness. (Another option is to add the `unique` option to your sorts.) Nonunique sorts can be hard to spot:
 
 ```stata
-* The random variable r here is not unique, because Stata's default type (float) does not have enough precision when N=100,000. 
+* The random variable r here is not unique, because Stata's default type (float) does not have enough precision when N=100,000.
 * isid will therefore generate an error (unless you have changed Stata's default type to double)
 clear
 set seed 100
