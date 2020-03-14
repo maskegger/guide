@@ -24,17 +24,17 @@ The rest of this guide explains the logic behind the organization of this templa
 # Setting up your environment
 -----------
 
-I work on several projects at the same time, access them from multiple computers (laptop, home, work, etc.), and share them with multiple coauthors. This can cause problems when defining the location of a folder in code. A project's location may be **/Users/jreif/MyProject** on one computer and **/Users/coauthor/MyProject** on another computer. You could manually change this pathname every time a different person or different computer runs the code, but this solution is cumbersome for large projects with thousands or millions of lines of code. A better solution is to define a macro that points to the project folder.
+I work on several projects at the same time, access them from multiple computers (laptop, home, work, etc.), and share them with multiple coauthors. Using multiple environments makes it hard to define the pathname (location) of a folder. A project's location may be **/Users/jreif/MyProject** on one computer and **/Users/coauthor/MyProject** on another computer. You could manually change this pathname every time a different person or different computer runs the code, but this solution is cumbersome for large projects with thousands or millions of lines of code. A better solution is to define a variable that points to the project folder.
 
-Below I describe how I set up my working environment to address this challenge. Note that users are NOT required to do this in order to run my published code. But, setting up your environment like I do will make it easier to write your analysis in environments with lots of computers and coauthors.
+Below I describe how I set up my working environment to address this challenge. Note that users are NOT required to set up an environment like I do in order to run my published code. But, setting up your environment like I do will make it easier to develop your analysis in environments with multiple computers and coauthors.
 
 ## Dropbox
 
-I use Dropbox to sync my projects across different computers. Dropbox has several appealing features. It creates backups of my projects across multiple computers and the Dropbox server, and in my experience has fewer bugs than alternatives such as Box. Dropbox makes it easy to share files with coauthors. All files stored in Dropbox have the same relative paths, which is helpful when writing scripts (more on this below).
+I use Dropbox to sync my projects across environments. Dropbox has several appealing features. It creates backups of my projects across multiple computers and the Dropbox server, and in my experience has fewer bugs than alternatives such as Box. Dropbox makes it easy to share files with coauthors. All files stored in Dropbox have the same relative paths, which is helpful when writing scripts (more on this below).
 
 ## Stata profile
 
-Stata automatically runs **profile.do** upon launch (if found).
+Stata automatically runs the script **profile.do** upon launch (if found).
 
 <img src="assets/guide/stata_profile.PNG" width="100%" title="Stata profile">
 
@@ -50,15 +50,15 @@ global RSCRIPT_PATH "C:/Program Files/R/R-3.6.2/bin/x64/Rscript.exe"
 run "$DROPBOX/stata_profile.do"
 ```
 
-This file contains settings specific to my PC, namely the location of Dropbox and my *R* installation. The Stata profile stored on my mac is identical except that it defines different locations for DROPBOX and RSCRIPT_PATH. I could also define the locations of my project directories here. But instead, I store those on Dropbox at **$DROPBOX/stata_profile.do**, along with any other settings that are common across my computers.
+This file contains settings specific to my PC, namely the location of my Dropbox folder and my *R* executable (useful if you use [rscript](https://github.com/reifjulian/rscript)). The Stata profile stored on my mac is identical except that it defines different locations for DROPBOX and RSCRIPT_PATH. I could also define the locations of all my projects in **profiledo**. But instead, I store those definitions on Dropbox at **$DROPBOX/stata_profile.do**, along with any other settings that are common across my computers, in a script called **stata_profile.do** and then call that script from **profile.do**.
 
-Here are the contents of an example Stata profile stored on Dropbox:
+Here are the contents of an example **stata_profile.do** stored on Dropbox:
 ```stata
 set varabbrev off
 global MyProject "$DROPBOX/research/my-project/MyProject"
 ```
 
-`set varabbrev off` is a command I want run everytime I open Stata, for reasons [I explain below](#good_coding_practice). The second line defines the location of [MyProject](https://github.com/reifjulian/my-project/tree/master/MyProject), which is stored on Dropbox. In practice my Stata profile defines a large number of globals, one for every project I am working on. Whenever I start a new project, I define a new global for it and add it to **$DROPBOX/stata_profile.do**. Because all my computers are synced to Dropbox, I only have to do this once.
+The first line, `set varabbrev off`, is a command I want executed every time I open Stata on all my computers, for reasons [I explain below](#good_coding_practice). The second line defines the location of [MyProject](https://github.com/reifjulian/my-project/tree/master/MyProject), which I stored on Dropbox. In practice my Stata profile defines a large number of globals, one for every project I am working on. Whenever I start a new project, I define a new global for it and add it to **$DROPBOX/stata_profile.do**. Because all my computers are synced to Dropbox, I only have to do this once.
 
 ## *R* profile
 
@@ -86,7 +86,7 @@ Sys.setenv(MyProject = file.path(Sys.getenv("DROPBOX"), "research/my-project/MyP
 
 ## Folder structure
 
-An analysis starts with raw data (e.g., a dataset downloaded from the web). Scripts process these data, run analyses, and create tables. So the minimal folder structure for a project looks like this:
+A typical analysis starts with raw data (e.g., a dataset downloaded from the web). Scripts process these data, run analyses, and create tables. So the minimal folder structure for a project looks like this:
 
 ```text
 .
@@ -116,9 +116,9 @@ The master script, **0_run_all.do**, executes the entire analysis. Running this 
 
 At any time, you can delete all these extra folders, keeping only **data/raw/** and **scripts/**, and then rerun your analysis from scratch. When the project is complete, a copy of **analysis/** serves as a standalone replication package.
 
-The analysis folder contains three subfolders. **scripts/** stores all scripts and libraries required to run the analysis. **data/** includes raw and processed data. **data/raw/** is read-only. Scripts write only to **data/proc/** or **results/**.
+The analysis folder contains three subfolders. **scripts/** includes all scripts and libraries (add-on packages) required to run the analysis. **data/** includes raw and processed data. **data/raw/** is read-only. Scripts write files only to **data/proc/** or **results/**.
 
-**results/** contains all final output, including tables and figures. These can be linked to a LaTeX document on Overleaf or stored in an adjacent folder:
+**results/** contains all final output, including tables and figures. These can be linked to a LaTeX document on Overleaf or stored in an adjacent folder. For example, the example [MyProject](https://github.com/reifjulian/my-project/tree/master/MyProject) has the following folder structure:
 
 ```text
 .
@@ -138,11 +138,11 @@ The analysis folder contains three subfolders. **scripts/** stores all scripts a
     └── tables/
 ```
 
-When you are ready to update the paper, copy **analysis/results/figures/** and **analysis/results/tables/** to **paper/**. **paper/** contains manuscript files. Additional documents such as literature references can be stored there or in a separate folder at the top of project directory.
+When you are ready to update the paper, copy **analysis/results/figures/** and **analysis/results/tables/** to **paper/**, which contains manuscript files. Additional documents such as literature references can be stored in **paper/** or in a separate, standalone folder at the top the project directory.
 
 ## Programs
 
-Programs (aka functions, subroutines) are pieces of code that are called repeatedly by your scripts. These might be do-files, ado-files, or scripts written in another programming language such as *R*. An introduction to ado-files is available [here](https://blog.stata.com/2015/11/10/programming-an-estimation-command-in-stata-a-first-ado-command). Because programs are not called directly by the master script, **0_run_all.do**, they should be stored in the subdirectory **scripts/functions/**.
+Programs (aka functions, subroutines) are pieces of code that are called repeatedly by your scripts. These might be do-files, ado-files, or scripts written in another programming language such as *R*. An introduction to ado-files is available [here](https://blog.stata.com/2015/11/10/programming-an-estimation-command-in-stata-a-first-ado-command). Because programs are not called directly by the master script, **0_run_all.do**, I store them in the subdirectory **scripts/programs/**. This reduces clutter in large projects with many scripts.
 
 ## Libraries
 
@@ -150,13 +150,13 @@ My code frequently employs user-written Stata commands, such as [regsave](https:
 1. Unless a user has a local copy of the program, she won't be able to run your code if you don't supply this program.
 1. These commands are updated over time and newer versions may not work with older code implementations.
 
-Many people do not appreciate how code updates can inhibit replication. Here is an example. You perform a Stata analysis using a new, user-written estimation command called, say, `regols`. You publish your paper, along with your replication code, but do not include the code for `regols`. Ten years later a researcher tries to replicate your analysis. The code breaks because she has not installed `regols`. She opens Stata and type `ssc install regols`, which installs the newest version of that command. But, in the intervening ten years the author of `regols` fixed a bug in how the standard errors are calculated. When the researcher runs your code she finds your estimates are no longer statistically significant. Is this because you included the wrong dataset with your replication, because there is mistake in the analysis code, or because you failed to correctly copy/paste your output into your publication? The researcher does not know. She cannot replicate your published results and must now decide what to do.
+Many people do not appreciate how code updates can inhibit replication. Here is an example. You perform a Stata analysis using a new, user-written estimation command called, say, `regols`. You publish your paper, along with your replication code, but do not include the code for `regols`. Ten years later a researcher tries to replicate your analysis. The code breaks because she has not installed `regols`. She opens Stata and type `ssc install regols`, which installs the newest version of that command. But, in the intervening ten years the author of `regols` fixed a bug in how the standard errors are calculated. When the researcher runs your code with her updated version of `regols` she finds your estimates are no longer statistically significant. Is this because you included the wrong dataset with your replication, because there is mistake in the analysis code, or because you failed to correctly copy/paste your output into your publication? The researcher does not know. She cannot replicate your published results and must now decide what to do.
 
-Stata takes version control [seriously](https://www.stata.com/features/integrated-version-control/). At a minimum, you should always include a `version` statement in the final version of your published code. Writing `version 15` instructs all future versions of Stata to run your code the same way Stata 15 did. Unfortunately, many user-written packages (including my own) are not carefully version controlled.  To address this, I include a script called [_install_stata_packages.do](https://github.com/reifjulian/my-project/blob/master/MyProject/analysis/scripts/_install_stata_packages.do) in all my working projects. This script installs a copy of any user-written packages I need for the project into a subdirectory of the project folder: **analysis/scripts/libraries/stata**. Rerunning this script will install updated versions of these add-on's (if desired). I delete the script when my project is ready to be published, which locks down the code for these user-written packages and thus ensures I can exactly replicate my Stata analysis forever.
+Stata takes version control [seriously](https://www.stata.com/features/integrated-version-control/). At a minimum, you should always include a `version` statement in the final version of your published code. Writing `version 15` instructs all future versions of Stata to run your code the same way Stata 15 did. (Your [master script](https://github.com/reifjulian/my-project/blob/master/MyProject/analysis/scripts/0_run_all.do) is a good place for the version statement.) Unfortunately, many user-written packages (including my own) are not carefully version controlled.  To address this, I include a script called [_install_stata_packages.do](https://github.com/reifjulian/my-project/blob/master/MyProject/analysis/scripts/_install_stata_packages.do) in all my working projects. This script installs a copy of any user-written packages I need for the project into a subdirectory of the project folder: **analysis/scripts/libraries/stata**. Rerunning this script will install updated versions of these add-on's (if desired). I delete this script when my project is ready to be published, which effectively locks down the code for these user-written packages and thus ensures I can exactly replicate my Stata analysis forever. In addition, including these user-written packages allows my project to be replicated on a non-networked computer that does not have access to the internet.
 
-I am unaware of a version control statement for *R*. As a second-best solution, my replication packages include an *R* program, [_confirm_version.R](https://github.com/reifjulian/my-project/blob/master/MyProject/analysis/scripts/programs/_confirm_version.R), which checks whether the user: (1) is running a sufficiently recent version of *R*; and (2) has installed necessary add-on programs such as [tidyverse](https://tidyverse.tidyverse.org/). As with Stata, it is possible to install these add-on packages into your project subdirectory. In practice, doing this in *R* can create headaches. Add-on packages such as tidyverse are very large (hundreds of megabytes) and--if you want to ensure cross-platform replicability--need to be installed separately for Mac, Unix, and Windows. Doing this for my (very simple) example project would increase that project's file size by nearly a gigabyte! I therefore again settled for a second-best solution and require the user to install these packages themselves. I provide those installation instructions in the project's README and in [_confirm_version.R](https://github.com/reifjulian/my-project/blob/master/MyProject/analysis/scripts/programs/_confirm_version.R) to make this as simple as possible.
+I am unaware of a version control statement for *R*. As a second-best solution, my replication packages include an *R* program, [_confirm_version.R](https://github.com/reifjulian/my-project/blob/master/MyProject/analysis/scripts/programs/_confirm_version.R), which checks whether the user: (1) is running a sufficiently recent version of *R*; and (2) has installed necessary add-on programs such as [tidyverse](https://tidyverse.tidyverse.org/). As with Stata, it is possible to install these add-on packages into your project subdirectory. In practice, doing this in *R* creates headaches. Add-on packages such as tidyverse are very large (hundreds of megabytes) and--if you want to ensure cross-platform replicability--need to be installed separately for Mac, Unix, and Windows. Doing this for my (very simple) example project would increase that project's file size by nearly a gigabyte! I therefore again settled for a second-best solution and instead require the user to install these packages themselves. I provide those installation instructions in the project's README and in [_confirm_version.R](https://github.com/reifjulian/my-project/blob/master/MyProject/analysis/scripts/programs/_confirm_version.R) to make this as simple as possible.
 
-Still, in many cases it may be worthwhile installing your *R* packages in the project subdirectory. See [_install_R_packages.R](https://github.com/reifjulian/my-project/blob/master/MyProject/analysis/scripts/_install_R_packages.R) for an example of how to do this. Other alternatives--used frequently by serious users of *R*--include [packrat](https://rstudio.github.io/packrat/) and [renv](https://rstudio.github.io/renv/articles/renv.html).
+If you don't mind using up lots of disk space and want to ensure reproducibility, I recommend installing your *R* packages in the project subdirectory just like I did with Stata. See [_install_R_packages.R](https://github.com/reifjulian/my-project/blob/master/MyProject/analysis/scripts/_install_R_packages.R) for an example. Following this example will result in a folder structure that looks like this:
 
 ```text
 .
@@ -169,22 +169,23 @@ Still, in many cases it may be worthwhile installing your *R* packages in the pr
     	    ├── R/
     	    └── stata/
 ```
-
+Other alternatives--used frequently by serious users of *R*--include [packrat](https://rstudio.github.io/packrat/) and [renv](https://rstudio.github.io/renv/articles/renv.html).
 
 # Publishing your code
 -----------
 
-Follow these steps before publishing your code to ensure replication.
+You've done an analysis, written up your results, and had a paper accepted. It's now time to publish your code store it on a public website or secure repository such as the [ICPSR data enclave](https://www.icpsr.umich.edu/icpsrweb/content/ICPSR/access/restricted/enclave.html)! If you've followed the steps above, publishing is easy. Follow these steps before publishing your code to ensure replication.
 
-1. Add a README file to the **analysis/** folder. It should include the following information:
-  1. Title and authors of the paper
-  1. Required software, including version numbers
-  1. **Clear** instructions for how to run the analysis. If the analysis cannot be run--because the data are proprietary, for example--this should be noted.
-  1. Description of where the output is stored
+1. Make a copy of the **analysis/** folder.
+1. Add a [README file](https://github.com/reifjulian/my-project/blob/master/MyProject/analysis/README.pdf) to the copy of the **analysis/** folder. The README should include the following information:
+    i. Title and authors of the paper
+    i. Required software, including version numbers
+    i. **Clear** instructions for how to run the analysis. If the analysis cannot be run--because the data are proprietary, for example--this should be noted.
+    i. Description of where the output is stored
 
 1. Remove **_install_stata_packages.do** from the **scripts/** folder.
 
-1. Disable all locally installed Stata programs not located in your Stata folder. (This will ensure that your analysis is actually using programs installed in your project subdirectory, rather than somewhere else on your machine.) On Windows, this can usually be done by renaming **c:/ado** to **c:/_ado**. You can test whether you succeeded as follows. Suppose you have a copy of `regsave` somewhere on your machine and also in your local project directory. Open up a new instance of Stata and type `which regsave`. Stata should report "command regsave not found". If not, Stata will tell you where the command is located, and you can then rename that folder by adding an underscore.
+1. (Optional) Disable all locally installed Stata programs not located in your Stata folder. (This will ensure that your analysis is actually using programs installed in your project subdirectory, rather than somewhere else on your machine.) On Windows, this can usually be done by renaming **c:/ado** to **c:/_ado**. You can test whether you succeeded as follows. Suppose you have a copy of `regsave` somewhere on your machine and also in your local project directory. Open up a new instance of Stata and type `which regsave`. Stata should report "command regsave not found". If not, Stata will tell you where the command is located, and you can then rename that folder by adding an underscore.
 
 1. Delete the **data/proc/** and **results/** folders.
 
@@ -194,7 +195,7 @@ Follow these steps before publishing your code to ensure replication.
 
 1. Recompile the paper and double-check the numbers.
 
-1. Rename the **analysis/** folder to something more descriptive, and zip it.
+1. Rename the copy of your **analysis/** folder to something more descriptive, and zip it.
 
 Checking numbers can be difficult and tedious. Include lots of asserts in your code when writing up your results to reduce errors. (See an example of how to use `assert` commands [here](https://github.com/reifjulian/my-project/blob/master/MyProject/analysis/scripts/4_make_tables_figures.do).
 
