@@ -24,7 +24,7 @@ The rest of this guide explains the logic behind the organization of this templa
 # Setting up your environment
 -----------
 
-I work on several projects at the same time, access them from multiple computers (laptop, home, work, etc.), and share them with multiple coauthors. This can cause problems when defining the location of a folder in code. A project's location may be **/Users/jreif/Documents/MyProject** on one computer and **/Users/coauthor/Documents/MyProject** on another computer. You could manually change this pathname every time a different person or different computer runs the code, but this solution is cumbersome for large projects with thousands or millions of lines of code. A better solution is to define a macro that points to the project folder.
+I work on several projects at the same time, access them from multiple computers (laptop, home, work, etc.), and share them with multiple coauthors. This can cause problems when defining the location of a folder in code. A project's location may be **/Users/jreif/MyProject** on one computer and **/Users/coauthor/MyProject** on another computer. You could manually change this pathname every time a different person or different computer runs the code, but this solution is cumbersome for large projects with thousands or millions of lines of code. A better solution is to define a macro that points to the project folder.
 
 Below I describe how I set up my working environment to address this challenge. Note that users are NOT required to do this in order to run my published code. But, setting up your environment like I do will make it easier to write your analysis in environments with lots of computers and coauthors.
 
