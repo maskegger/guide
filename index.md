@@ -86,7 +86,9 @@ Sys.setenv(MyProject = file.path(Sys.getenv("DROPBOX"), "research/my-project/MyP
 
 ## Folder structure
 
-A typical analysis starts with raw data (e.g., a dataset downloaded from the web). Scripts process these data, run analyses, and create tables. So the minimal folder structure for a project looks like this:
+A project can include lots of materials: the analysis, the manuscript, related literature, grant proposals, etc. Your analysis, which includes both code and data, should be kept in a distinct location. Keeping the analysis separate will make it easier to create a standalone replication package when the project is complete.
+
+A typical analysis starts with raw data (e.g., a dataset downloaded from the web). Scripts process these data and run the analysis. Scripts and data should be stored in separate folders. The core structure for the project's analysis looks like this:
 
 ```text
 .
@@ -118,7 +120,7 @@ At any time, you can delete all these extra folders, keeping only **data/raw/** 
 
 The analysis folder contains three subfolders. **scripts/** includes all scripts and libraries (add-on packages) required to run the analysis. **data/** includes raw and processed data. **data/raw/** is read-only. Scripts write files only to **data/proc/** or **results/**.
 
-**results/** contains all final output, including tables and figures. These can be linked to a LaTeX document on Overleaf or stored in an adjacent folder. For example, the example [MyProject](https://github.com/reifjulian/my-project/tree/master/MyProject) has the following folder structure:
+**results/** contains all final output, including tables and figures. These can be linked to a LaTeX document on Overleaf or stored in an adjacent folder. For example, [MyProject](https://github.com/reifjulian/my-project/tree/master/MyProject) has the following folder structure:
 
 ```text
 .
@@ -138,7 +140,7 @@ The analysis folder contains three subfolders. **scripts/** includes all scripts
     └── tables/
 ```
 
-When you are ready to update the paper, copy **analysis/results/figures/** and **analysis/results/tables/** to **paper/**, which contains manuscript files. Additional documents such as literature references can be stored in **paper/** or in a separate, standalone folder at the top the project directory.
+When you are ready to update your manuscript, copy **analysis/results/figures/** and **analysis/results/tables/** to **paper/**, which contains manuscript files. Additional documents such as literature references can be stored in **paper/** or in a separate, standalone folder at the top the project directory.
 
 ## Programs
 
@@ -170,6 +172,10 @@ If you don't mind using up lots of disk space and want to ensure reproducibility
     	    └── stata/
 ```
 Other alternatives--used frequently by serious users of *R*--include [packrat](https://rstudio.github.io/packrat/) and [renv](https://rstudio.github.io/renv/articles/renv.html).
+
+### Stata plugins (advanced)
+
+Most Stata add-on's are written in Stata or Mata, which are cross-platform, i.e., they can be run on any computer that has a copy of Stata. A small number of Stata add-ons are written in C/C++ and must be compiled to a plugin (DLL) that is specific to your computer's architecture (Mac vs PC, 32 vs 64 bit, etc.). If you write C/C++ code for Stata, I encourage you to compile it for multiple platforms and include all platform-specific plugins as part of your replication package. See [gtools](https://github.com/mcaceresb/stata-gtools) and [strgroup](https://github.com/reifjulian/strgroup) for examples of how to write a program that autodetects which plugin to call based on your computer's architecture.
 
 # Publishing your code
 -----------
