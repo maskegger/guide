@@ -239,6 +239,8 @@ isid r
 # Other helpful links
 -----------
 
+[AEA Data Editor's guide](https://github.com/AEADataEditor/aea-de-guidance)
+
 [Dan Sullivan's best practices for coding](http://www.danielmsullivan.com/pages/tutorial_workflow_3bestpractice.html)
 
 [Gentzkow and Shapiro coding guide](https://web.stanford.edu/~gentzkow/research/CodeAndData.pdf)
