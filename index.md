@@ -205,14 +205,16 @@ You've done an analysis, written up your results, and had a paper accepted. It's
 
 Checking numbers can be difficult and tedious. Include lots of asserts in your code when writing up your results to reduce errors. (See an example of how to use `assert` commands [here](https://github.com/reifjulian/my-project/blob/master/MyProject/analysis/scripts/4_make_tables_figures.do).
 
-# Good coding practice
+# Stata coding tips
 -----------
 
 Use forward slashes for pathnames (**$DROPBOX/project** not **$DROPBOX\project**). Backslashes are an escape character in Stata and can cause issues depending on what operating system you are running. Using forward slashes ensures cross-platform compatibility.
 
-Never use hard-coded paths like **C:/Users/jreif/Dropbox/MyProject**. All pathnames should reference a global variable defined either in your Stata profile or in your master script, **0_run_all.do**. **I should be able to run your entire analysis from my personal computer without having to edit any of your scripts.**
+Never use hard-coded paths like **C:/Users/jreif/Dropbox/MyProject**. All pathnames should reference a global variable defined either in your Stata profile or in your master script, **0_run_all.do**. I should be able to run your entire analysis from my personal computer without having to edit any of your scripts. (With the exception of maybe having to define a global variable.)
 
 Include `set varabbrev off` in your Stata profile.  Most professional Stata programmers I know do this in order to avoid unexpected behaviors such as [this](https://www.ifs.org.uk/docs/stata_gotchasJan2014.pdf).
+
+When working with very large datasets, install and use Mauricio Caceres' [gtools](https://github.com/mcaceresb/stata-gtools).
 
 Sometimes an analysis will produce different results each time you run it. Here are two common reasons why this happens:
 1. One of your commands requires random numbers and you forgot to use `set seed #`
