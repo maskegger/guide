@@ -106,7 +106,7 @@ The master script, **run.do**, executes the entire analysis. Running this script
 .
 └── analysis/
     ├── data/
-	├── processed/
+    ├── processed/
     ├── results/
         ├── figures/
         └── tables/
@@ -126,7 +126,7 @@ The analysis folder contains three subfolders. **scripts/** includes all scripts
 .
 └── analysis/
     ├── data/
-	├── processed/
+    ├── processed/
     ├── results/
         ├── figures/
         └── tables/
