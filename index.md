@@ -95,8 +95,8 @@ A typical analysis starts with raw data (e.g., a dataset downloaded from the web
 └── analysis/
     ├── data/
     ├── scripts/
-        ├── 1_process_raw_data.do
-        └── 2_...
+    ├    ├── 1_process_raw_data.do
+    ├    └── 2_...
 	└── run.do		
 ```
 
