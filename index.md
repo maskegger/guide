@@ -95,9 +95,9 @@ A typical analysis starts with raw data (e.g., a dataset downloaded from the web
 └── analysis/
     ├── data/
     ├── scripts/
-    ├    ├── 1_process_raw_data.do
-    ├    └── 2_...
-	└── run.do		
+        ├── 1_process_raw_data.do
+        └── 2_...
+    └── run.do		
 ```
 
 The master script, **run.do**, executes the entire analysis. Running this script creates all necessary additional folders, intermediate files, and results:
@@ -113,7 +113,7 @@ The master script, **run.do**, executes the entire analysis. Running this script
     ├── scripts/
         ├── 1_process_raw_data.do
         └── 2_...
-	└── run.do		
+    └── run.do		
 ```
 
 At any time, you can delete all these extra folders, keeping only **data/** and **scripts/**, and then rerun your analysis from scratch. When the project is complete, a copy of **analysis/** serves as a standalone replication package.
@@ -133,7 +133,7 @@ The analysis folder contains three subfolders. **scripts/** includes all scripts
     ├── scripts/
         ├── 1_process_raw_data.do
         └── 2_...
-	└── run.do		
+    └── run.do		
 └── paper/
     ├── manuscript.tex
     ├── figures/
