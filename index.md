@@ -18,7 +18,6 @@ The rest of this guide explains the logic behind the organization of this templa
 <!-- Table of contents
 1. toc1
 {:toc}
-
 https://error404.atomseo.com/
 -->
 
