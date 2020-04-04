@@ -93,8 +93,8 @@ A typical analysis starts with raw data (e.g., a dataset downloaded from the web
 ```text
 .
 └── analysis/
-    └── data/
-    └── scripts/
+    ├── data/
+    ├── scripts/
         ├── 1_process_raw_data.do
         └── 2_...
 	└── run.do		
@@ -105,12 +105,12 @@ The master script, **run.do**, executes the entire analysis. Running this script
 ```text
 .
 └── analysis/
-    └── data/
-	└── processed/
-    └── results/
+    ├── data/
+	├── processed/
+    ├── results/
         ├── figures/
         └── tables/
-    └── scripts/
+    ├── scripts/
         ├── 1_process_raw_data.do
         └── 2_...
 	└── run.do		
@@ -125,12 +125,12 @@ The analysis folder contains three subfolders. **scripts/** includes all scripts
 ```text
 .
 └── analysis/
-    └── data/
-	└── processed/
-    └── results/
+    ├── data/
+	├── processed/
+    ├── results/
         ├── figures/
         └── tables/
-    └── scripts/
+    ├── scripts/
         ├── 1_process_raw_data.do
         └── 2_...
 	└── run.do		
@@ -167,7 +167,7 @@ If you don't mind potentially using up lots of disk space and want to ensure rep
 ```text
 .
 └── analysis/
-    └── data/
+    ├── data/
     └── scripts/
         ├── functions/
         └── libraries/
@@ -179,6 +179,85 @@ Other alternatives--used frequently by serious users of *R*--include [packrat](h
 ### Stata plugins (advanced)
 
 Most Stata add-on's are written in Stata or Mata, which are cross-platform, i.e., they can be run on any computer that has a copy of Stata. A small number of Stata add-ons are written in C/C++ and must be compiled to a plugin (DLL) that is specific to your computer's architecture (Mac vs PC, 32 vs 64 bit, etc.). If you write C/C++ code for Stata, I encourage you to compile it for multiple platforms and include all platform-specific plugins as part of your replication package. See [gtools](https://github.com/mcaceresb/stata-gtools) and [strgroup](https://github.com/reifjulian/strgroup) for examples of how to write a program that autodetects which plugin to call based on your computer's architecture.
+
+# Automating tables
+-----------
+
+Automating your tables and figures makes it easy to incorporate updated data into your analyzes minimizes mistakes that can arise when transferring results from Stata to your manuscript. Automating figures is easy using Stata's `graph export` command. Here I provide instructions for automating tables. 
+
+There are several ways to automate tables. Below I present my preferred method, which uses Stata add-ons I developed in graduate school. This method is targeted at people who use LaTeX and desire flexible control over their table formatting. Automation is broken down into two steps. The first step uses [regsave](https://github.com/reifjulian/regsave) to save regression output to a file. The second step uses [texsave](https://github.com/reifjulian/texsave) to save the output in LaTeX format.
+
+## regsave
+
+`regsave` is a Stata command that stores regression results. To install the latest version, run the following at your Stata prompt:
+```stata
+net install regsave, from("https://raw.githubusercontent.com/reifjulian/regsave/master") replace
+```
+
+The [online documentation](https://github.com/reifjulian/regsave) provides a tutorial for `regsave`. Below, I show how I use it in the [sample replication package](https://github.com/reifjulian/my-project). This code is a good example of how I use it in most of my analyses.
+
+Here is the relevant code from [3_regressions.do](https://github.com/reifjulian/my-project/blob/master/analysis/scripts/3_regressions.do):
+```stata
+tempfile results
+use "$MyProject/processed/auto.dta", clear
+
+local replace replace
+foreach rhs in "mpg" "mpg weight" {
+	
+	* Domestic cars
+	reg price `rhs' if foreign=="Domestic", robust
+	regsave using "`results'", t p autoid `replace' addlabel(rhs,"`rhs'",origin,Domestic) 
+	local replace append
+	
+	* Foreign cars
+	reg price `rhs' if foreign=="Foreign", robust
+	regsave using "`results'", t p autoid append addlabel(rhs,"`rhs'",origin,"Foreign") 		
+}
+```
+
+This code runs four regressions and saves the output to a tempfile. Let's open the file and look at the contents.
+
+```stata
+use "`results'", clear
+list
+```
+
+<img src="assets/guide/regsave.PNG" width="100%" title="Contents of results tempfile">
+
+The file contains the regression coefficients, standard errors, t-statistics, p-values, etc. for each regression. We could save more information, such as confidence intervals, by specifying the appropriate option. Type `help regsave` to see the full set of options. 
+
+This output file can be easily analyzed and manipulated, but is not ideal for table presentation. We can convert this "long" table to a "wide" table using the `regsave_tbl` helper function. Here is the relevant code from [4_make_tables_figures.do](https://github.com/reifjulian/my-project/blob/master/analysis/scripts/4_make_tables_figures.do)
+
+```stata
+tempfile my_table
+use "$MyProject/results/intermediate/my_regressions.dta", clear
+
+* Merge together the four regressions into one table
+local run_no = 1
+local replace replace
+foreach orig in "Domestic" "Foreign" {
+	foreach rhs in "mpg" "mpg weight" {
+		
+		regsave_tbl using "`my_table'" if origin=="`orig'" & rhs=="`rhs'", name(col`run_no') asterisk(10 5 1) parentheses(stderr) sigfig(3) `replace'
+		
+		local run_no = `run_no'+1
+		local replace append
+	}
+}
+```
+
+Let's again open the saved file and look at its contents
+
+```stata
+use "`my_table'", clear
+list
+```
+
+<img src="assets/guide/regsave_tbl.PNG" width="100%" title="Contents of my_table tempfile">
+
+This format is more appropriate for a table. Of course, we still need to clean it up. For example, I do not want to report t-statistics or the estimate of constant term. That is easy to accomplish using Stata's data manipulation commands.  Outputting the table in LaTeX format can then be accomplished using `texsave`.
+
+## texsave
 
 # Publishing your code
 -----------
