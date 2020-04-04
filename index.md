@@ -18,13 +18,15 @@ The rest of this guide explains the logic behind the organization of this templa
 <!-- Table of contents
 1. toc1
 {:toc}
+
+https://error404.atomseo.com/
 -->
 
 
 # Setting up your environment
 -----------
 
-I work on several projects at the same time, access them from multiple computers (laptop, home, work, etc.), and share them with multiple coauthors. Using multiple environments makes it hard to define the pathname (location) of a folder. A project's location may be **/Users/jreif/MyProject** on one computer and **/Users/coauthor/MyProject** on another computer. You could manually change this pathname every time a different person or different computer runs the code, but this solution is cumbersome for large projects with thousands or millions of lines of code. A better solution is to define a variable that points to the project folder.
+I work on several projects at the same time, access them from multiple computers (laptop, home, work, etc.), and share them with multiple coauthors. Using multiple environments makes it hard to define the pathname (location) of a folder. A project's location may be **/Users/jreif/my-project** on one computer and **/Users/coauthor/my-project** on another computer. You could manually change this pathname every time a different person or different computer runs the code, but this solution is cumbersome for large projects with thousands or millions of lines of code. A better solution is to define a variable that points to the project folder.
 
 Below I describe how I set up my working environment to address this challenge. Note that users are NOT required to set up an environment like I do in order to run my published code. But, setting up your environment like I do will make it easier to develop your analysis in environments with multiple computers and coauthors.
 
@@ -292,7 +294,7 @@ Checking numbers can be difficult and tedious. Include lots of asserts in your c
 
 Use forward slashes for pathnames (`$DROPBOX/project` not `$DROPBOX\project`). Backslashes are an escape character in Stata and can cause issues depending on what operating system you are running. Using forward slashes ensures cross-platform compatibility.
 
-Never use hard-coded paths like **C:/Users/jreif/Dropbox/MyProject**. All pathnames should reference a global variable defined either in your Stata profile or in your [master script](https://github.com/reifjulian/my-project/blob/master/analysis/run.do). I should be able to run your entire analysis from my personal computer without having to edit any of your scripts. (With the exception of maybe having to define a global variable.)
+Never use hard-coded paths like **C:/Users/jreif/Dropbox/my-project**. All pathnames should reference a global variable defined either in your Stata profile or in your [master script](https://github.com/reifjulian/my-project/blob/master/analysis/run.do). I should be able to run your entire analysis from my personal computer without having to edit any of your scripts. (With the exception of maybe having to define a global variable.)
 
 Include `set varabbrev off` in your Stata profile.  Most professional Stata programmers I know do this in order to avoid unexpected behaviors such as [this](https://www.ifs.org.uk/docs/stata_gotchasJan2014.pdf).
 
