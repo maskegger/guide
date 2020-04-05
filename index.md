@@ -4,11 +4,15 @@ title: Stata Coding Guide
 description: Julian Reif, University of Illinois
 ---
 
+Empirical research in economics has grown in importance thanks to improvements in computing power and the increased availability of rich datasets. Researchers today commonly estimate regressions with millions of observations derived from multiple datasets. Research teams frequently include multiple people working at different universities. Analyses employing confidential data must be performed remotely, often on a non-networked computer at a research data center. Cutting edge analyses may require thousands or millions of lines of code written in multiple languages. 
+
+These recent developments introduce complexity and the potential for non-transparent errors. Peer review rarely evaluates code, even though code represents the bulk of the work for many projects. Research on this topic suggests that the results from many published papers [cannot be reproduced](https://www.nowpublishers.com/article/Details/CFR-0053) from the code and data provided by the original authors. The AEA's new [data and code availability policy](https://www.aeaweb.org/journals/policies/data-code) aims to improve this situation by imposing professional standards for coding and documentation. Unfortunately, most researchers (myself included) received little or no training in how to write code. 
+
 This guide describes how to put together a "push-button" publication-quality analysis in Stata. Following this guide will help:
 1. Minimize coding errors during analysis
 1. Automate the creation of tables and figures
 1. Provide seamless integration with supporting *R* analyses
-1. Produce a replication folder suitable for publication
+1. Produce a replication folder compliant with the AEA's new data and code availability policy
 
 As part of this guide, I created a comprehensive template that includes an example paper along with an accompanying replication package, available [here](https://github.com/reifjulian/my-project). Try it out and see how easy (or not!) it is for you to reproduce my example analysis. If you encounter problems let me know.
 
@@ -393,6 +397,8 @@ isid r
 [Gentzkow and Shapiro coding guide](https://web.stanford.edu/~gentzkow/research/CodeAndData.pdf)
 
 [Grant McDermott's data science lectures](https://github.com/uo-ec607/lectures)
+
+[Lars Vilhuber's presention on transparency and reproducibility])(https://zenodo.org/record/3735536#.XopGfqhKguU)
 
 [Roger Koenker's guide on reproducibility](http://www.econ.uiuc.edu/~roger/research/repro)
 
