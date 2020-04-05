@@ -310,43 +310,39 @@ We can now copy the output file, **my_regressions.tex**, to **paper/tables/** an
 
 <img src="assets/guide/table_pdf.PNG" width="100%" title="PDF LaTeX table">
 
-# Publishing your code
+# Publishing checklist
 -----------
 
 You've done an analysis, written up your results, and had a paper accepted. It's now time to publish your code store it on a public website or secure repository such as the [ICPSR data enclave](https://www.icpsr.umich.edu/icpsrweb/content/ICPSR/access/restricted/enclave.html)! If you've organized your project as suggested above, publishing is easy. Follow these steps before publishing your code to ensure replication.
 
-1. Make a copy of the **analysis/** folder.
-1. Add a [README file](https://github.com/reifjulian/my-project/blob/master/analysis/README.pdf) to the copy of the **analysis/** folder. The README should include the following information:
-    i. Title and authors of the paper
-    i. Required software, including version numbers
-    i. **Clear** instructions for how to run the analysis. If the analysis cannot be run--because the data are proprietary, for example--this should be noted.
-    i. Description of where the output is stored
+1. Make a copy of the **analysis/** folder. For the steps below, work only with this copy, which will serve as your "replication package".
 
-1. Remove **_install_stata_packages.do** from the **scripts/** folder.
+2. Remove **_install_stata_packages.do** from the **scripts/** folder.
 
-1. (Optional) Disable all locally installed Stata programs not located in your Stata folder. (This will ensure that your analysis is actually using programs installed in your project subdirectory, rather than somewhere else on your machine.) On Windows, this can usually be done by renaming **c:/ado** to **c:/_ado**. You can test whether you succeeded as follows. Suppose you have a copy of `regsave` somewhere on your machine and also in your local project directory. Open up a new instance of Stata and type `which regsave`. Stata should report "command regsave not found". If not, Stata will tell you where the command is located, and you can then rename that folder by adding an underscore.
+3. Rerun your analysis from scratch.
 
-1. Delete the **processed/** and **results/** folders.
+  - (Optional) Prior to rerunning, disable all locally installed Stata programs not located in your Stata folder. (This will ensure that your analysis is actually using add-ons installed in your project subdirectory, rather than installed somewhere else on your machine.) On Windows, this can usually be done by renaming **c:/ado** to **c:/_ado**. You can test whether you succeeded as follows. Suppose you have a copy of `regsave` somewhere on your machine and also in your local project directory. Open up a new instance of Stata and type `which regsave`. Stata should report "command regsave not found". If not, Stata will tell you where the command is located, and you can then rename that folder by adding an underscore.
 
-1. Run **run.do**, which should rerun the entire analysis and regenerate all tables and figures.
+  - Delete the **processed/** and **results/** folders.
 
-1. Copy **results/figures/** and **results/tables/** to the **paper/** folder.
+  - Run **run.do** to regenerate all tables and figures using just the raw data.
 
-1. Recompile the paper and double-check the numbers.
+4. Confirm that the reproduced output in **results/figures/** and **results/tables/** matches results in your manuscript.
 
-1. Add a [README file](https://github.com/reifjulian/my-project/blob/master/analysis/README.pdf) to the copy of the **analysis/** folder. The README should include the following information:
-    i. Title and authors of the paper
-    i. Required software, including version numbers
-    i. **Clear** instructions for how to run the analysis. If the analysis cannot be run--because the data are proprietary, for example--this should be noted.
-    i. Description of where the output is stored
+5. Add a [README file](https://github.com/reifjulian/my-project/blob/master/analysis/README.pdf) to the copy of the **analysis/** folder. The README should include the following information:
+  - Title and authors of the paper
+  - Description of the data
+  - Required software, including version numbers
+  - **Clear** instructions for how to run the analysis. If the analysis cannot be run--because the data are proprietary, for example--this should be noted.
+  - Description of where the output is stored
 
-1. (Optional) Rename the copy of your **analysis/** folder.
+6. (Optional) Rename the copy of your **analysis/** folder.
 
-1. Zip (compress) your analysis.
+7. Zip (compress) the analysis folder.
 
-1. Upload to the data archive.
+8. Upload to the data archive.
 
-Checking numbers can be difficult and tedious. Include lots of asserts in your code when writing up your results to reduce errors. (See an example of how to use `assert` commands [here](https://github.com/reifjulian/my-project/blob/master/analysis/scripts/4_make_tables_figures.do).
+Step 4 above--checking numbers--can be tedious. Include lots of asserts in your code when writing up your results to make this process smoother. (See an example of how to use `assert` commands [here](https://github.com/reifjulian/my-project/blob/master/analysis/scripts/4_make_tables_figures.do).) For example, if the main result of your paper is a regression estimate of $1.2 million, include an assert in your code that will fail should this number ever change following a new data update.
 
 # Stata coding tips
 -----------
