@@ -14,4 +14,5 @@ group :jekyll_plugins do
   gem 'jekyll-sitemap'
   gem 'kramdown'
   gem 'rouge'
+  gem 'nokogiri', '>= 1.10.8'
 end
