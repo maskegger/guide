@@ -186,11 +186,13 @@ Most Stata add-on's are written in Stata or Mata, which are cross-platform, i.e.
 
 Automating your tables and figures makes it easy to incorporate updated data into your analyzes minimizes mistakes that can arise when transferring results from Stata to your manuscript. Automating figures is easy using Stata's `graph export` command. Here I provide instructions for automating tables. 
 
-There are several ways to automate tables. Below I present my preferred method, which uses Stata add-ons I developed in graduate school. This method is targeted at people who use LaTeX and desire flexible control over their table formatting. Automation is broken down into two steps. The first step uses [regsave](https://github.com/reifjulian/regsave) to save regression output to a file. The second step uses [texsave](https://github.com/reifjulian/texsave) to save the output in LaTeX format.
+There are several ways to automate tables. Below I present my preferred method, which uses Stata add-ons I developed in graduate school. This method is targeted at people who use LaTeX and desire flexible control over their table formatting. For an example of the kinds of tables you can create, see my paper on [workplace wellness](https://www.nber.org/workplacewellness/s/IL_Wellness_Study_1.pdf) (coauthored with Damon Jones and David Molitor). 
+
+Automation is broken down into two steps. The first step uses [regsave](https://github.com/reifjulian/regsave) to save regression output to a file. The second step uses [texsave](https://github.com/reifjulian/texsave) to save the output in LaTeX format.
 
 ## regsave
 
-`regsave` is a Stata command that stores regression results. To install the latest version, run the following at your Stata prompt:
+`regsave` is a Stata add-on that stores regression results. To install the latest version, run the following at your Stata prompt:
 ```stata
 net install regsave, from("https://raw.githubusercontent.com/reifjulian/regsave/master") replace
 ```
@@ -247,7 +249,7 @@ foreach orig in "Domestic" "Foreign" {
 }
 ```
 
-Let's again open the saved file and look at its contents
+Let's again open the saved file and look at its contents:
 
 ```stata
 use "`my_table'", clear
@@ -256,14 +258,62 @@ list
 
 <img src="assets/guide/regsave_tbl.PNG" width="100%" title="Contents of my_table tempfile">
 
-This format is more appropriate for a table. Of course, we still need to clean it up. For example, I do not want to report t-statistics or the estimate of constant term. That is easy to accomplish using Stata's data manipulation commands.  Outputting the table in LaTeX format can then be accomplished using `texsave`.
+This "wide" format is more appropriate for a table. Of course, we still need to clean it up. For example, I do not want to report t-statistics or estimates of constant term. In the next step we format the table and then use `texsave` to output it into a LaTeX file.
 
 ## texsave
+
+[texsave](https://github.com/reifjulian/texsave) is a Stata add-on that saves a dataset as a LaTeX text file. To install the latest version, type the following at your Stata prompt:
+
+```stata
+net install texsave, from("https://raw.githubusercontent.com/reifjulian/texsave/master") replace
+```
+
+We first reformat the dataset that was produced using `regsave_tbl`:
+
+```stata
+use "`my_table'", clear
+drop if inlist(var,"_id","rhs","origin") | strpos(var,"_cons") | strpos(var,"tstat") | strpos(var,"pval")
+
+* texsave will output these labels as column headers
+label var col1 "Spec 1"
+label var col2 "Spec 2"
+label var col3 "Spec 1"
+label var col4 "Spec 2"
+
+* Display R^2 in LaTeX math mode
+replace var = "\(R^2\)" if var=="r2"
+
+* Clean variable names
+replace var = subinstr(var,"_coef","",1)
+replace var = "" if strpos(var,"_stderr")
+replace var = "Miles per gallon"     if var=="mpg"
+replace var = "Weight (pounds)"      if var=="weight"
+replace var = "Price (1978 dollars)" if var=="price"
+
+list
+```
+
+This code first removes output we don't want in our table, like t-statistics. It then labels the four columns of numbers. As we shall see, those Stata labels will later serve as column headers. The code rewrites `r2` using the LaTeX math synytax `\(R^2\)`. (This syntax is an alternative to the more common syntax `$R^2$`, which causes problems in Stata because `$` also refers to local macros.) The last part of the code provides more descriptive labels for the regressors. Typing `list` shows that our table now looks like this:
+
+<img src="assets/guide/regsave_tbl_clean.PNG" width="100%" title="Cleaned table">
+
+We are now ready to save the table in LaTeX format using `texsave`. We will provide a title, some additional LaTeX code for the header of the table, and a footnote:
+
+```stata
+local title "Association between automobile price and fuel efficiency"
+local headerlines "& \multicolumn{2}{c}{Domestic cars} & \multicolumn{2}{c}{Foreign cars} " "\cmidrule(lr){2-3} \cmidrule(lr){4-5}"
+local fn "Notes: Outcome variable is price (1978 dollars). Columns (1) and (2) report estimates of \(\beta\) from equation (\ref{eqn:model}) for domestic automobiles. Columns (3) and (4) report estimates for foreign automobiles. Robust standard errors are reported in parentheses. A */**/*** indicates significance at the 10/5/1\% levels."
+texsave using "$MyProject/results/tables/my_regressions.tex", autonumber varlabels hlines(-2) nofix replace marker(tab:my_regressions) title("`title'") headerlines("`headerlines'") footnote("`fn'")
+```
+
+We can now copy the output file, **my_regressions.tex**, to **paper/tables/** and then link to it from our LaTeX [manuscript](https://github.com/reifjulian/my-project/blob/master/paper/my_paper.tex) with the code `\input{tables/my_regressions.tex}`. After compiling the manuscript, our table looks like this:
+
+<img src="assets/guide/table_pdf.PNG" width="100%" title="PDF LaTeX table">
 
 # Publishing your code
 -----------
 
-You've done an analysis, written up your results, and had a paper accepted. It's now time to publish your code store it on a public website or secure repository such as the [ICPSR data enclave](https://www.icpsr.umich.edu/icpsrweb/content/ICPSR/access/restricted/enclave.html)! If you've followed the steps above, publishing is easy. Follow these steps before publishing your code to ensure replication.
+You've done an analysis, written up your results, and had a paper accepted. It's now time to publish your code store it on a public website or secure repository such as the [ICPSR data enclave](https://www.icpsr.umich.edu/icpsrweb/content/ICPSR/access/restricted/enclave.html)! If you've organized your project as suggested above, publishing is easy. Follow these steps before publishing your code to ensure replication.
 
 1. Make a copy of the **analysis/** folder.
 1. Add a [README file](https://github.com/reifjulian/my-project/blob/master/analysis/README.pdf) to the copy of the **analysis/** folder. The README should include the following information:
@@ -284,7 +334,17 @@ You've done an analysis, written up your results, and had a paper accepted. It's
 
 1. Recompile the paper and double-check the numbers.
 
-1. Rename the copy of your **analysis/** folder to something more descriptive, and zip it.
+1. Add a [README file](https://github.com/reifjulian/my-project/blob/master/analysis/README.pdf) to the copy of the **analysis/** folder. The README should include the following information:
+    i. Title and authors of the paper
+    i. Required software, including version numbers
+    i. **Clear** instructions for how to run the analysis. If the analysis cannot be run--because the data are proprietary, for example--this should be noted.
+    i. Description of where the output is stored
+
+1. (Optional) Rename the copy of your **analysis/** folder.
+
+1. Zip (compress) your analysis.
+
+1. Upload to the data archive.
 
 Checking numbers can be difficult and tedious. Include lots of asserts in your code when writing up your results to reduce errors. (See an example of how to use `assert` commands [here](https://github.com/reifjulian/my-project/blob/master/analysis/scripts/4_make_tables_figures.do).
 
