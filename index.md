@@ -329,21 +329,21 @@ You've completed your analysis, written up your results, and are ready to submit
 
 If you are publishing your paper, you should also complete the following additional steps:
 
-{:start="3"}
-4. Remove **_install_stata_packages.do** from the **scripts/** folder.
+{:start="4"}
+1. Remove **_install_stata_packages.do** from the **scripts/** folder.
 
-5. Add a [README file](https://github.com/reifjulian/my-project/blob/master/analysis/README.pdf) to the copy of the **analysis/** folder. The README should include the following information:
+1. Add a [README file](https://github.com/reifjulian/my-project/blob/master/analysis/README.pdf) to the copy of the **analysis/** folder. The README should include the following information:
   - Title and authors of the paper
   - Description of the data
   - Required software, including version numbers
   - **Clear** instructions for how to run the analysis. If the analysis cannot be run--because the data are proprietary, for example--this should be noted.
   - Description of where the output is stored
 
-6. (Optional) Rename the copy of your **analysis/** folder.
+1. (Optional) Rename the copy of your **analysis/** folder.
 
-7. Zip (compress) the analysis folder.
+1. Zip (compress) the analysis folder.
 
-8. Upload to a secure data archive.
+1. Upload to a secure data archive.
   - The [ICPSR data enclave](https://www.icpsr.umich.edu/icpsrweb/content/ICPSR/access/restricted/enclave.html) is one option.
 
 Step 4 above--checking numbers--can be tedious. Include lots of asserts in your code when writing up your results to make this process smoother. (See an example of how to use `assert` commands [here](https://github.com/reifjulian/my-project/blob/master/analysis/scripts/4_make_tables_figures.do).) For example, if the main result of your paper is a regression estimate of $1.2 million, include an assert in your code that will fail should this number ever change following a new data update.
