@@ -317,18 +317,19 @@ You've completed your analysis, written up your results, and are ready to submit
 
 1. Make a copy of the **analysis/** folder. For the steps below, work only with this copy, which will serve as your "replication package".
 
-2. Rerun your analysis from scratch.
+1. Rerun your analysis from scratch.
 
-  - (Optional) Prior to rerunning, disable all locally installed Stata programs not located in your Stata folder. (This will ensure that your analysis is actually using add-ons installed in your project subdirectory, rather than installed somewhere else on your machine.) On Windows, this can usually be done by renaming **c:/ado** to **c:/_ado**. You can test whether you succeeded as follows. Suppose you have a copy of `regsave` somewhere on your machine and also in your local project directory. Open up a new instance of Stata and type `which regsave`. Stata should report "command regsave not found". If not, Stata will tell you where the command is located, and you can then rename that folder by adding an underscore.
+    - (Optional) Prior to rerunning, disable all locally installed Stata programs not located in your Stata folder. (This will ensure that your analysis is actually using add-ons installed in your project subdirectory, rather than installed somewhere else on your machine.) On Windows, this can usually be done by renaming **c:/ado** to **c:/_ado**. You can test whether you succeeded as follows. Suppose you have a copy of `regsave` somewhere on your machine and also in your local project directory. Open up a new instance of Stata and type `which regsave`. Stata should report "command regsave not found". If not, Stata will tell you where the command is located, and you can then rename that folder by adding an underscore.
 
-  - Delete the **processed/** and **results/** folders.
+    - Delete the **processed/** and **results/** folders.
 
-  - Run **run.do** to regenerate all tables and figures using just the raw data.
+    - Run **run.do** to regenerate all tables and figures using just the raw data.
 
-3. Confirm that the reproduced output in **results/figures/** and **results/tables/** matches results in your manuscript.
+1. Confirm that the reproduced output in **results/figures/** and **results/tables/** matches results in your manuscript.
 
 If you are publishing your paper, you should also complete the following additional steps:
 
+{:start="3"}
 4. Remove **_install_stata_packages.do** from the **scripts/** folder.
 
 5. Add a [README file](https://github.com/reifjulian/my-project/blob/master/analysis/README.pdf) to the copy of the **analysis/** folder. The README should include the following information:
