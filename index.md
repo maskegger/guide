@@ -8,16 +8,14 @@ Empirical research in economics has grown in importance thanks to improvements i
 
 These recent developments introduce complexity and the potential for non-transparent errors. Peer review rarely evaluates code, even though code represents the bulk of the work for many projects. Research on this topic suggests that the results from many published papers [cannot be reproduced](https://www.nowpublishers.com/article/Details/CFR-0053) from the code and data provided by the original authors. The AEA's new [data and code availability policy](https://www.aeaweb.org/journals/policies/data-code) aims to improve this situation by imposing professional standards for coding and documentation. Unfortunately, most researchers (myself included) received little or no training in how to write code. 
 
-This guide describes how to put together a "push-button" publication-quality analysis in Stata. Following this guide will help:
-1. Minimize coding errors during analysis
+This guide describes how to set up a robust coding environment and write a "push-button" analysis in Stata. Its purpose is to help researchers:
+1. Minimize coding errors
 1. Automate the creation of tables and figures
 1. Provide seamless integration with supporting *R* analyses
 1. Produce a replication folder compliant with the AEA's new data and code availability policy
 
-As part of this guide, I created a comprehensive template that includes an example paper along with an accompanying replication package, available [here](https://github.com/reifjulian/my-project). Try it out and see how easy (or not!) it is for you to reproduce my example analysis. If you encounter problems let me know.
+The guide includes an accompanying AEA-compliant [sample replication package](https://github.com/reifjulian/my-project) that you are free to use as a template. Try it out and see how easy (or not!) it is for you to reproduce my example analysis. If you encounter any difficulties let me know.
 
-
-The rest of this guide explains the logic behind the organization of this template and provides instructions for how to set up a robust environment for your Stata projects.
 
 <!-- Table of contents
 1. toc1
