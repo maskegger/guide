@@ -6,16 +6,16 @@ description: Julian Reif, University of Illinois
 
 Empirical research in economics has grown in importance thanks to improvements in computing power and the increased availability of rich datasets. Researchers  commonly estimate regressions with millions of observations derived from multiple datasets. Research teams frequently include multiple people working at different universities. Analyses employing confidential data must be performed remotely, often on a non-networked computer at a research data center. Cutting edge analyses may require thousands or millions of lines of code written in multiple languages. 
 
-These recent developments introduce complexity and the potential for non-transparent errors. Peer review rarely evaluates code, even though code often represents the bulk of the work. Research suggests that the results from many published papers [cannot be reproduced](https://www.nowpublishers.com/article/Details/CFR-0053) from the code and data provided by the original authors. The AEA's new [data and code availability policy](https://www.aeaweb.org/journals/policies/data-code) aims to improve this situation by imposing professional standards for coding and documentation. Unfortunately, most researchers (myself included) received little or no training in how to write code, and there are few examples or templates showing how to organize and document a typical analysis. 
+These recent developments introduce complexity and the potential for non-transparent errors. Peer review rarely evaluates code, even though code often represents the bulk of the work. Research suggests that the results from many published papers [cannot be reproduced](https://www.nowpublishers.com/article/Details/CFR-0053) from the code and data provided by the original authors. The AEA's new [data and code availability policy](https://www.aeaweb.org/journals/policies/data-code) aims to improve this situation by imposing professional standards for coding and documentation. Unfortunately, most researchers (myself included) received little or no training in how to organize projects, write code, or document analyses. 
 
 This guide describes how to set up a robust coding environment and write a "push-button" analysis in Stata. Its purpose is to help researchers:
 1. Minimize coding errors
 1. Automate the creation of tables and figures
 1. Integrate their Stata code with supporting *R* analyses
 1. Produce a replication package with the following features: 
-  1. Compliant with the AEA's [data and code availability policy](https://www.aeaweb.org/journals/policies/data-code)
-  1. Cross-platform (Mac, Windows, Unix)
-  1. Runs on a non-networked computer (no need to download add-ons)
+  - Compliant with the AEA's [data and code availability policy](https://www.aeaweb.org/journals/policies/data-code)
+  - Cross-platform (Mac, Windows, Unix)
+  - Runs on a non-networked computer (i.e., no need to download add-ons)
 
 The guide includes an accompanying AEA-compliant [sample replication package](https://github.com/reifjulian/my-project) that you are free to use as a template. Try it out and see how easy (or not!) it is for you to reproduce my example analysis. If you encounter any difficulties let me know.
 
@@ -27,15 +27,15 @@ https://error404.atomseo.com/
 -->
 
 
-# Setting up your environment
+# Setting up the environment
 
-I work on several projects at the same time, access them from multiple computers (laptop, home, work, etc.), and share them with multiple coauthors. Using multiple environments makes it hard to define the pathname (location) of a folder. A project's location may be **/Users/jreif/my-project** on one computer and **/Users/coauthor/my-project** on another computer. You could manually change this pathname every time a different person or different computer runs the code, but this solution is cumbersome for large projects with thousands or millions of lines of code. A better solution is to define a variable that points to the project folder.
+I work on several projects at the same time, access them from multiple computers (laptop, home, work, etc.), and share them with multiple coauthors. Using multiple environments makes it hard to define the pathname (location) of a folder. A project's location may be **/Users/jreif/my-project** on one computer and **/Users/coauthor/my-project** on another computer. You could manually change this pathname every time a different person or different computer runs the code, but this solution is cumbersome for large projects with thousands or millions of lines of code. Likewise, when you install an add-on, by default it will not be available on other computer systems.
 
-Below I describe how I set up my working environment to address this challenge. Note that users are NOT required to do this in order to run my published code. But, setting up your environment like I do will make it easier to develop your analysis in environments with multiple computers and coauthors.
+Below I describe how I set up my working environment to address these challenges. Note that users are NOT required to do this in order to run my published code. But, setting up your environment like I do will make it easier to develop your analysis in environments with multiple computers and coauthors.
 
 ## Dropbox
 
-I use Dropbox to sync my projects across environments. Dropbox has several appealing features. It creates backups of my projects across multiple computers and the Dropbox server, and in my experience has fewer bugs than alternatives such as Box. Dropbox makes it easy to share files with coauthors. All files stored in Dropbox have the same relative paths, which is helpful when writing scripts (more on this below).
+I use Dropbox to sync my projects across environments. Dropbox has several appealing features. It creates backups of my projects across multiple computers and the Dropbox server, and in my experience has fewer bugs than alternatives such as Box. Dropbox makes it easy to share files with coauthors. All files stored in Dropbox have the same relative paths, which is helpful when writing scripts (more on this below). [Version control systems](#version_control_systems) can be used as an alternative/complement to Dropbox.
 
 ## Stata profile
 
@@ -55,12 +55,12 @@ global RSCRIPT_PATH "C:/Program Files/R/R-3.6.2/bin/x64/Rscript.exe"
 run "$DROPBOX/stata_profile.do"
 ```
 
-This file contains settings specific to my PC, namely the location of my Dropbox folder and my *R* executable (used by [rscript](https://github.com/reifjulian/rscript)). The Stata profile stored on my mac is identical except that it defines different locations for DROPBOX and RSCRIPT_PATH. I could also define the locations of all my projects in **profile.do**. But instead, I store those definitions, along with any other settings that are common across my computers, on Dropbox in a script called **stata_profile.do** and then call that script from **profile.do**.
+This file contains settings specific to my PC, namely the location of my Dropbox folder and my *R* executable (used by [rscript](https://github.com/reifjulian/rscript)). The Stata profile stored on my mac is identical except that it defines different locations for `DROPBOX` and `RSCRIPT_PATH`. I could also define the locations of all my projects in **profile.do**. But instead, I store those definitions, along with any other settings that are common across my computers, on Dropbox in a script called **stata_profile.do** and then call that script from **profile.do**.
 
 Here are the contents of an example **stata_profile.do** stored on Dropbox:
 ```stata
 set varabbrev off
-global MyProject "$DROPBOX/research/my-project/analysis"
+global MyProject "$DROPBOX/my-project/analysis"
 ```
 
 The first line, `set varabbrev off`, is a command I want executed every time I open Stata on all my computers, for reasons [I explain below](#good_coding_practice). The second line defines the location of the analysis for [MyProject](https://github.com/reifjulian/my-project), which I stored on Dropbox. In practice my Stata profile defines a large number of globals, one for every project I am working on. Whenever I start a new project, I define a new global for it and add it to **stata_profile.do**. Because all my computers are synced to Dropbox, I only have to do this once.
@@ -83,7 +83,7 @@ source(file.path(Sys.getenv("DROPBOX"), "R_profile.R"))
 As with my Stata profile, my *R* profile in turn runs a second script located at the top level of my Dropbox directory. This file, **R_profile.R**, stores *R* settings common across all my computers, such as the paths for all my projects. Here is an example for the MyProject analysis:
 
 ```R
-Sys.setenv(MyProject = file.path(Sys.getenv("DROPBOX"), "research/my-project/analysis"))
+Sys.setenv(MyProject = file.path(Sys.getenv("DROPBOX"), "my-project/analysis"))
 ```
 
 ## Version control systems
@@ -153,13 +153,13 @@ To update the MyProject manuscript, copy **analysis/results/figures/** and **ana
 
 ## Programs
 
-Programs (aka functions, subroutines) are pieces of code that are called by your scripts. These might be do-files, ado-files, or scripts written in another programming language such as *R*. An introduction to ado-files is available [here](https://blog.stata.com/2015/11/10/programming-an-estimation-command-in-stata-a-first-ado-command). Because programs are not called directly by the master script, **run.do**, I usually store them in the subdirectory **scripts/programs/**. This reduces clutter in large projects with many scripts.
+Programs (aka functions, subroutines) are additional pieces of code called by your scripts. These might be do-files, ado-files, or scripts written in another programming language such as *R*. An introduction to ado-files is available [here](https://blog.stata.com/2015/11/10/programming-an-estimation-command-in-stata-a-first-ado-command). Because programs are not called directly by the master script, **run.do**, I usually store them in the subdirectory **scripts/programs/**. This reduces clutter in large projects with many scripts.
 
 ## Libraries
 
-My code frequently employs user-written Stata commands, such as [regsave](https://github.com/reifjulian/regsave) or [reghdfe](http://scorreia.com/software/reghdfe/install.html). To ensure replication, it is **very important** to include copies of these programs with your code:
-1. Unless a user has a local copy of the program, she won't be able to run your code if you don't supply this program.
-1. These commands are updated over time and newer versions may not work with older code implementations.
+My code frequently employs user-written (add-on) Stata commands, such as [regsave](https://github.com/reifjulian/regsave) or [reghdfe](http://scorreia.com/software/reghdfe/install.html). To ensure replication, it is *very important* to include copies of these programs with your code:
+1. A user can't run your code without it.
+1. These commands are updated over time, causing your code to break or produce different output.
 
 Many people do not appreciate how code updates can inhibit replication. Here is an example. You perform a Stata analysis using a new, user-written estimation command called, say, `regols`. You publish your paper, along with your replication code, but do not include the code for `regols`. Ten years later a researcher tries to replicate your analysis. The code breaks because she has not installed `regols`. She opens Stata and types `ssc install regols`, which installs the newest version of that command. But, in the intervening ten years the author of `regols` fixed a bug in how the standard errors are calculated. When the researcher runs your code with her updated version of `regols` she finds your estimates are no longer statistically significant. The researcher does not know whether this happens because you included the wrong dataset with your replication, because there is mistake in the analysis code, or because you failed to correctly copy/paste your output into your publication. She cannot replicate your published results and must now decide what to conclude.
 
