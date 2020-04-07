@@ -180,6 +180,9 @@ If you don't mind potentially using up lots of disk space and want to ensure rep
     └── scripts/
         ├── libraries/
     	    ├── R/
+			    ├── linux/
+			    ├── osx/			
+			    └── windows/				
     	    └── stata/
         ├── programs/
         ├── 1_process_raw_data.do
@@ -254,7 +257,7 @@ foreach orig in "Domestic" "Foreign" {
     regsave_tbl using "`my_table'" if origin=="`orig'" & rhs=="`rhs'", name(col`run_no') asterisk(10 5 1) parentheses(stderr) sigfig(3) `replace'
 		
     local run_no = `run_no'+1
-    dlocal replace append
+    local replace append
   }
 }
 ```
@@ -268,7 +271,7 @@ list
 
 <img src="assets/guide/regsave_tbl.PNG" width="100%" title="Contents of my_table tempfile">
 
-This "wide" format is much more appropriate for a table. Of course, we still need to clean it up. For example, I do not want to report t-statistics or estimates of constant term. In the next step below we will format the table and then use `texsave` to output it into a LaTeX file.
+This "wide" format is much more appropriate for a table. Of course, we still need to clean it up. For example, I do not want to report t-statistics or estimates of the constant term. In the next step below we will format the table and use `texsave` to output the table into a LaTeX file.
 
 ## texsave
 
@@ -316,36 +319,37 @@ local fn "Notes: Outcome variable is price (1978 dollars). Columns (1) and (2) r
 texsave using "$MyProject/results/tables/my_regressions.tex", autonumber varlabels hlines(-2) nofix replace marker(tab:my_regressions) title("`title'") headerlines("`headerlines'") footnote("`fn'")
 ```
 
-We can now copy the output file, **my_regressions.tex**, to **paper/tables/** and then link to it from our LaTeX [manuscript](https://github.com/reifjulian/my-project/blob/master/paper/my_paper.tex) with the code `\input{tables/my_regressions.tex}`. After compiling the manuscript, our table looks like this:
+Finally, we can copy the output file, **my_regressions.tex**, to **paper/tables/** and then link to it from our LaTeX [manuscript](https://github.com/reifjulian/my-project/blob/master/paper/my_paper.tex) using the code `\input{tables/my_regressions.tex}`. After compiling the manuscript, our table looks like this:
 
 <img src="assets/guide/table_pdf.PNG" width="100%" title="PDF LaTeX table">
 
 # Submission checklist
 
-You've completed your analysis, written up your results, and are ready to submit to a journal! Before doing so, you should check that all your numbers are reproducible. If there are any mistakes in the code, better to find them now rather than later! The following steps will help ensure that anybody can reproduce all your final results:
+You completed your analysis, wrote up your results, and are ready to submit to a journal! Before doing so, you should check that all your numbers are reproducible. If there are any mistakes in the code, better to find them now rather than later! Follow these these steps to replicate your analysis:
 
-1. Make a copy of the **analysis/** folder. For the steps below, work only with this copy. It will become your "replication package".
+1. Make a copy of the **analysis/** folder. For the remaining steps below, work only with this copy. It will become your "replication package".
 
-1. Rerun your analysis from scratch.
+1. Rerun your analysis from scratch:
 
-    - (Optional) Prior to rerunning, disable all locally installed Stata programs not located in your Stata folder. (This ensures your analysis is actually using the add-ons installed in your project subdirectory, rather than add-ons installed somewhere else on your machine.) On Windows, this can usually be done by renaming **c:/ado** to **c:/_ado**. You can test whether you succeeded as follows. Suppose you had previously installed `regsave` on your computer system. To check that it is no longer accessbily after renaming **c:/ado** to **c:/_ado**, open up a new instance of Stata and type `which regsave`. Stata should report "command regsave not found". If not, Stata will tell you where the command is located, and you can then rename that folder by adding an underscore. Repeat until Stata can no longer find `regsave`. 
+    - (Optional) Prior to rerunning, disable all locally installed Stata programs not located in your project folder. (This ensures your analysis is actually using the add-ons installed in your project subdirectory, rather than add-ons installed somewhere else on your machine.) On Windows, this can usually be done by renaming **c:/ado** to **c:/_ado**. You can test whether you succeeded as follows. Suppose you had previously installed `regsave` on your computer system. To check that it is no longer accessbily after renaming **c:/ado** to **c:/_ado**, open up a new instance of Stata and type `which regsave`. Stata should report "command regsave not found". If not, Stata will report where the command is located, and you can then rename that folder by adding an underscore. Repeat until Stata can no longer find `regsave`. 
 
     - Delete the **processed/** and **results/** folders.
 
-    - Run **run.do** to regenerate all tables and figures using just the raw data.
+    - Execute **run.do** to regenerate all tables and figures using just the raw data.
 
-1. Confirm that the reproduced output in **results/figures/** and **results/tables/** matches the results in your manuscript.
+1. Confirm that the reproduced output in **results/figures/** and **results/tables/** matches the results reported in your manuscript.
 
 If you are publishing your paper, you should also complete the following additional steps:
 
 {:start="4"}
 1. Remove **_install_stata_packages.do** from **scripts/**.
 
-1. Add a [README file](https://github.com/reifjulian/my-project/blob/master/analysis/README.pdf). The README should include the following information:
+1. Add a [README file](https://github.com/reifjulian/my-project/blob/master/analysis/README.pdf). At a minimum, the README should include the following information:
   - Title and authors of the paper
-  - Description of the data
   - Required software, including version numbers
   - **Clear** instructions for how to run the analysis. Inform the user if the analysis cannot actually be run (perhaps because the data are proprietary, for example).
+  - Description of the raw data and where it is stored
+  - Description of each script
   - Description of where the output is stored
 
 1. (Optional) Rename the copy of your **analysis/** folder.
@@ -355,7 +359,7 @@ If you are publishing your paper, you should also complete the following additio
 1. Upload to a secure data archive.
   - The [ICPSR data enclave](https://www.icpsr.umich.edu/icpsrweb/content/ICPSR/access/restricted/enclave.html) is one option.
 
-Step 4 above--checking numbers--can be tedious. Include lots of asserts in your code when writing up your results to make this process smoother. (See an example of how to use `assert` commands [here](https://github.com/reifjulian/my-project/blob/master/analysis/scripts/4_make_tables_figures.do).) For example, if the main result of your paper is a regression estimate of $1.2 million, include an assert in your code that will fail should this number ever change following a new data update.
+Step 3--confirming output--can be tedious. Include lots of asserts in your code when writing up your results to make this process easier. (See an example of how to use `assert` commands [here](https://github.com/reifjulian/my-project/blob/master/analysis/scripts/4_make_tables_figures.do).) For example, if the main result of your study is a regression estimate of $1.2 million, include an assert in your code that will fail should this number ever change following a new data update.
 
 # Stata coding tips
 
@@ -367,14 +371,14 @@ Never use hard-coded paths like **C:/Users/jreif/Dropbox/my-project**. All pathn
 
 Include `set varabbrev off` in your Stata profile.  Most professional Stata programmers I know do this in order to avoid unexpected behaviors such as [this](https://www.ifs.org.uk/docs/stata_gotchasJan2014.pdf).
 
-When working with very large datasets, install and use Mauricio Bravo's [gtools](https://github.com/mcaceresb/stata-gtools).
+When working with very large datasets, use Mauricio Bravo's [gtools](https://github.com/mcaceresb/stata-gtools).
 
 Sometimes an analysis will produce different results each time you run it. Here are two common reasons why this happens:
 1. One of your commands requires random numbers and you forgot to use `set seed #`
 1. You have a nonunique sort. Add `isid` checks to your code prior to sorting to ensure uniqueness. (Another option is to add the `unique` option to your sorts.) Nonunique sorts can be hard to spot:
 
 ```stata
-* The random variable r here is not unique, because Stata's default type (float) does not have enough precision when N=100,000.
+* The random variable r here is not unique because Stata's default type (float) does not have enough precision when N=100,000.
 * isid will therefore generate an error (unless you have changed Stata's default type to double)
 clear
 set seed 100
