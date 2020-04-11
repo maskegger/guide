@@ -298,7 +298,8 @@ Full-Width Styles
 }
 
 #header_wrap .inner {
-  padding: 50px 10px 30px 10px;
+  //padding: 50px 10px 30px 10px;
+  padding: 5px 10px 5px 10px;
 }
 
 .header_container {
@@ -390,7 +391,8 @@ Full-Width Styles
   display: block;
   text-align: left;
   text-indent: 1.25em;
-  padding: .5em 0;
+  //padding: .5em 0;
+  padding: 0em 0;
   padding-right: .5em;
   color: #444;
   max-width: calc((100vw - 640px) / 2);
@@ -408,7 +410,8 @@ Full-Width Styles
 }
 
 #main_nav .main_nav_h1 {
-  font-size: 1.2em;
+  //font-size: 1.2em;
+  font-size: 1em;
   font-weight: bold;
   text-indent: .25em;
 }
