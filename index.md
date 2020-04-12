@@ -328,7 +328,7 @@ Finally, we can copy the output file, **my_regressions.tex**, to **paper/tables/
 
 # Submission checklist
 
-You completed your analysis, wrote up your results, and are ready to submit to a journal! Before doing so, you should check that all your numbers are reproducible. If there are any mistakes in the code, better to find them now rather than later! Follow these these steps to replicate your analysis:
+You completed your analysis, wrote up your results, and are ready to submit to a journal! Before doing so, you should check that all your numbers are reproducible. If there are any mistakes in the code, better to find them now rather than later! Follow these steps to replicate your analysis:
 
 1. Make a copy of the **analysis/** folder. For the remaining steps below, work only with this copy. It will become your "replication package".
 
@@ -384,7 +384,7 @@ Step 3--confirming output--can be tedious. Include lots of asserts in your code 
 ```stata
 * Stata's default type is float
 * With N=100,000 a randomly generated float may not be unique
-* isid below will generate an error unless you changed Stata's default type to double
+* isid below produces an error unless you set Stata's default type to double
 clear
 set seed 100
 set obs 100000
@@ -410,7 +410,7 @@ isid r
 
 [Grant McDermott's data science lectures](https://github.com/uo-ec607/lectures)
 
-[Lars Vilhuber's presention on transparency and reproducibility](https://zenodo.org/record/3735536#.XopGfqhKguU)
+[Lars Vilhuber's presentation on transparency and reproducibility](https://zenodo.org/record/3735536#.XopGfqhKguU)
 
 [Roger Koenker's guide on reproducibility](http://www.econ.uiuc.edu/~roger/research/repro)
 
