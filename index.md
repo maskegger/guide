@@ -384,7 +384,7 @@ Step 3--confirming output--can be tedious. Include lots of asserts in your code 
 ```stata
 * Stata's default type is float
 * With N=100,000 a randomly generated float may not be unique
-* isid below produces error unless Stata's default type is set to double
+* isid produces error unless you set Stata's default type to double
 clear
 set seed 100
 set obs 100000
