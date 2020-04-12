@@ -193,7 +193,9 @@ Other alternatives--used frequently by serious users of *R*--include [packrat](h
 
 ### Stata plugins (advanced)
 
-Most Stata add-on's are written in Stata or Mata, which are cross-platform languages that can be run on any computer with a copy of Stata. A small number of Stata add-ons are written in C/C++ and must be compiled to a plugin (AKA dynamically linked library, or DLL) that is specific to your computer's architecture (Mac/PC, 32/64 bit, etc.). If you write C/C++ code for Stata, I encourage you to compile it for multiple platforms and include all platform-specific plugins as part of your replication package. See [gtools](https://github.com/mcaceresb/stata-gtools) and [strgroup](https://github.com/reifjulian/strgroup) for examples of how to write a program that autodetects which plugin to call based on your computer's architecture. Mauricio Bravo provides a nice [example](https://mcaceresb.github.io/stata/plugins/2017/02/15/writing-stata-plugins-example.html) of the benefits of plugins.
+Most Stata add-on's are written in Stata or Mata, which are cross-platform languages that can be run on any computer with a copy of Stata. A small number of Stata add-ons are written in C/C++ and must be compiled to a plugin (AKA dynamically linked library, or DLL) that is specific to your computer's architecture (processor and operating system). Mauricio Bravo provides a nice [example](https://mcaceresb.github.io/stata/plugins/2017/02/15/writing-stata-plugins-example.html) of the benefits of plugins.
+
+If you write C/C++ code for Stata, I encourage you to compile it for multiple platforms and include all platform-specific plugins as part of your replication package. See [gtools](https://github.com/mcaceresb/stata-gtools) and [strgroup](https://github.com/reifjulian/strgroup) for examples of how to write a program that autodetects which plugin to call based on your computer's architecture. 
 
 # Automating tables
 
@@ -201,7 +203,7 @@ Automating tables and figures makes it easy to incorporate updated data into you
 
 There are several ways to automate tables. Below I present my preferred method, which uses Stata add-ons I developed for prior projects. This method is targeted at people who use LaTeX and desire flexible control over their table formatting. For examples of the kinds of tables you can automate in Stata, see my paper on [workplace wellness](https://www.nber.org/workplacewellness/s/IL_Wellness_Study_1.pdf) (coauthored with Damon Jones and David Molitor). 
 
-Automation is broken down into two steps. The first step uses [regsave](https://github.com/reifjulian/regsave) to save regression output to a file. The second step uses [texsave](https://github.com/reifjulian/texsave) to save the output in LaTeX format. In-between these two steps you can use Stata's built-in data manipulation commands to organize your table however you like.
+My method breaks automation down into two distinct steps. The first step uses [regsave](https://github.com/reifjulian/regsave) to save regression output to a file. The second step uses [texsave](https://github.com/reifjulian/texsave) to save the output in LaTeX format. In-between these two steps you can use Stata's built-in data manipulation commands to organize your table however you like.
 
 ## regsave
 
@@ -210,7 +212,7 @@ Automation is broken down into two steps. The first step uses [regsave](https://
 net install regsave, from("https://raw.githubusercontent.com/reifjulian/regsave/master") replace
 ```
 
-The [online documentation](https://github.com/reifjulian/regsave) provides a tutorial for `regsave`. Below, I show how I use it in the [sample replication package](https://github.com/reifjulian/my-project). This code is a good example of how I use it in most of my analyses.
+The [online documentation](https://github.com/reifjulian/regsave) provides a tutorial for `regsave`. Below, I demonstrate it using examples from my [sample replication package](https://github.com/reifjulian/my-project). This code is a good example of how I use it in most of my analyses.
 
 We begin by running code from the script [3_regressions.do](https://github.com/reifjulian/my-project/blob/master/analysis/scripts/3_regressions.do):
 ```stata
@@ -222,12 +224,12 @@ foreach rhs in "mpg" "mpg weight" {
 	
   * Domestic cars
   reg price `rhs' if foreign=="Domestic", robust
-  regsave using "`results'", t p autoid `replace' addlabel(rhs,"`rhs'",origin,Domestic) 
+  regsave using "`results'", t p autoid addlabel(rhs,"`rhs'",origin,Domestic) `replace' 
   local replace append
 	
   * Foreign cars
   reg price `rhs' if foreign=="Foreign", robust
-  regsave using "`results'", t p autoid append addlabel(rhs,"`rhs'",origin,"Foreign") 		
+  regsave using "`results'", t p autoid addlabel(rhs,"`rhs'",origin,"Foreign") append
 }
 ```
 
@@ -285,7 +287,8 @@ We first reformat the dataset that was produced using `regsave_tbl`:
 
 ```stata
 use "`my_table'", clear
-drop if inlist(var,"_id","rhs","origin") | strpos(var,"_cons") | strpos(var,"tstat") | strpos(var,"pval")
+drop if inlist(var,"_id","rhs","origin") | strpos(var,"_cons") 
+drop if strpos(var,"tstat") | strpos(var,"pval")
 
 * texsave will output these labels as column headers
 label var col1 "Spec 1"
@@ -306,7 +309,7 @@ replace var = "Price (1978 dollars)" if var=="price"
 list
 ```
 
-This code first removes output we don't want in our table, like t-statistics. It then labels the four columns of numbers. As we shall see, those Stata labels will later serve as column headers. The code rewrites `r2` using the LaTeX math synytax `\(R^2\)`. (This syntax is an alternative to the more common syntax `$R^2$`, which causes problems in Stata because `$` also refers to local macros.) The last part of the code provides more descriptive labels for the regressors. Typing `list` shows that our table now looks like this:
+This code first removes output I didn't want to report in this table, like extraneous labels, estimates of hte constant term, and t-statistics. It then labels the four columns of estimates. As we shall see, those Stata labels will later serve as column headers. The code then rewrites `r2` using the LaTeX math syntax `\(R^2\)`. (This syntax is an alternative to the more common syntax `$R^2$`, which can cause problems because Stata uses `$` to mark global macros.) The final lines of the code provide more descriptive labels for the regressors. Typing `list` shows that our table now looks like this:
 
 <img src="assets/guide/regsave_tbl_clean.PNG" width="100%" title="Cleaned table">
 
@@ -319,7 +322,7 @@ local fn "Notes: Outcome variable is price (1978 dollars). Columns (1) and (2) r
 texsave using "$MyProject/results/tables/my_regressions.tex", autonumber varlabels hlines(-2) nofix replace marker(tab:my_regressions) title("`title'") headerlines("`headerlines'") footnote("`fn'")
 ```
 
-Finally, we can copy the output file, **my_regressions.tex**, to **paper/tables/** and then link to it from our LaTeX [manuscript](https://github.com/reifjulian/my-project/blob/master/paper/my_paper.tex) using the code `\input{tables/my_regressions.tex}`. After compiling the manuscript, our table looks like this:
+Finally, we can copy the output file, **my_regressions.tex**, to **paper/tables/** and then link to it from our LaTeX [manuscript](https://github.com/reifjulian/my-project/blob/master/paper/my_paper.tex) using the LaTeX code `\input{tables/my_regressions.tex}`. After compiling the manuscript, our table looks like this:
 
 <img src="assets/guide/table_pdf.PNG" width="100%" title="PDF LaTeX table">
 
@@ -331,7 +334,7 @@ You completed your analysis, wrote up your results, and are ready to submit to a
 
 1. Rerun your analysis from scratch:
 
-    - (Optional) Prior to rerunning, disable all locally installed Stata programs not located in your project folder. (This ensures your analysis is actually using the add-ons installed in your project subdirectory, rather than add-ons installed somewhere else on your machine.) On Windows, this can usually be done by renaming **c:/ado** to **c:/_ado**. You can test whether you succeeded as follows. Suppose you had previously installed `regsave` on your computer system. To check that it is no longer accessbily after renaming **c:/ado** to **c:/_ado**, open up a new instance of Stata and type `which regsave`. Stata should report "command regsave not found". If not, Stata will report where the command is located, and you can then rename that folder by adding an underscore. Repeat until Stata can no longer find `regsave`. 
+    - (Optional) Prior to rerunning, disable all locally installed Stata programs not located in your project folder. (This ensures your analysis is actually using the add-ons installed in your project subdirectory, rather than add-ons installed somewhere else on your machine.) On Windows, this can usually be done by renaming **c:/ado** to **c:/_ado**. You can test whether you succeeded as follows. Suppose you had previously installed `regsave` on your computer system. To confirm that it is no longer accessible after renaming **c:/ado** to **c:/_ado**, open up a new instance of Stata and type `which regsave`. Stata should report "command regsave not found". If not, Stata will report where the command is located, and you can then rename that folder by adding an underscore. Repeat until Stata can no longer find `regsave`. 
 
     - Delete the **processed/** and **results/** folders.
 
@@ -344,11 +347,12 @@ If you are publishing your paper, you should also complete the following additio
 {:start="4"}
 1. Remove **_install_stata_packages.do** from **scripts/**.
 
-1. Add a [README file](https://github.com/reifjulian/my-project/blob/master/analysis/README.pdf). At a minimum, the README should include the following information:
+1. Add a [README file](https://github.com/reifjulian/my-project/blob/master/analysis/README.pdf). A minimal README should include the following information:
   - Title and authors of the paper
   - Required software, including version numbers
-  - **Clear** instructions for how to run the analysis. Inform the user if the analysis cannot actually be run (perhaps because the data are proprietary, for example).
+  - Clear instructions for how to run the analysis 
   - Description of the raw data and where it is stored
+  - Explanations for missing data (e.g., data are confidential or proprietary) and how to obtain them 
   - Description of each script
   - Description of where the output is stored
 
@@ -359,27 +363,28 @@ If you are publishing your paper, you should also complete the following additio
 1. Upload to a secure data archive.
   - The [ICPSR data enclave](https://www.icpsr.umich.edu/icpsrweb/content/ICPSR/access/restricted/enclave.html) is one option.
 
-Step 3--confirming output--can be tedious. Include lots of asserts in your code when writing up your results to make this process easier. (See an example of how to use `assert` commands [here](https://github.com/reifjulian/my-project/blob/master/analysis/scripts/4_make_tables_figures.do).) For example, if the main result of your study is a regression estimate of $1.2 million, include an assert in your code that will fail should this number ever change following a new data update.
+Step 3--confirming output--can be tedious. Include lots of asserts in your code when writing up your results to make this process easier. (See an example of how to use `assert` commands [here](https://github.com/reifjulian/my-project/blob/master/analysis/scripts/4_make_tables_figures.do).) For example, if the main result of your study is a regression estimate of $1.2 million, include an assert in your code that will fail should this number change following a new data update.
 
 # Stata coding tips
 
-Use forward slashes for pathnames (`$DROPBOX/project` not `$DROPBOX\project`). Backslashes are an escape character in Stata and can cause issues depending on what operating system you are running. Using forward slashes ensures cross-platform compatibility.
+- Use forward slashes for pathnames (`$DROPBOX/project` not `$DROPBOX\project`). Backslashes are an escape character in Stata and can cause issues depending on what operating system you are running. Using forward slashes ensures cross-platform compatibility.
 
-Make code readable. In addition to providing comments in the code, make your variable names meaningful (but short). Provide more detailed descriptions using the `label variable` command. Always include units in the label.
+- Rewrite your code frequently and make it readable. In addition to providing comments in the code, make your variable names meaningful (but short). Provide more detailed descriptions using the `label variable` command. Always include units in the label.
 
-Never use hard-coded paths like **C:/Users/jreif/Dropbox/my-project**. All pathnames should reference a global variable defined either in your Stata profile or in your [master script](https://github.com/reifjulian/my-project/blob/master/analysis/run.do). I should be able to run your entire analysis from my personal computer without having to edit any of your scripts. (With the exception of maybe having to define a global variable.)
+- Never use hard-coded paths like **C:/Users/jreif/Dropbox/my-project**. All pathnames should reference a global variable defined either in your Stata profile or in your [master script](https://github.com/reifjulian/my-project/blob/master/analysis/run.do). I should be able to run your entire analysis from my personal computer without having to edit any of your scripts. (With the exception of maybe having to define a global variable.)
 
-Include `set varabbrev off` in your Stata profile.  Most professional Stata programmers I know do this in order to avoid unexpected behaviors such as [this](https://www.ifs.org.uk/docs/stata_gotchasJan2014.pdf).
+- Include `set varabbrev off` in your Stata profile.  Most professional Stata programmers I know do this in order to avoid unexpected behaviors such as [this](https://www.ifs.org.uk/docs/stata_gotchasJan2014.pdf).
 
-When working with very large datasets, use Mauricio Bravo's [gtools](https://github.com/mcaceresb/stata-gtools).
+- When working with very large datasets, use Mauricio Bravo's [gtools](https://github.com/mcaceresb/stata-gtools).
 
-Sometimes an analysis will produce different results each time you run it. Here are two common reasons why this happens:
-1. One of your commands requires random numbers and you forgot to use `set seed #`
-1. You have a nonunique sort. Add `isid` checks to your code prior to sorting to ensure uniqueness. (Another option is to add the `unique` option to your sorts.) Nonunique sorts can be hard to spot:
+- Sometimes an analysis will inexplicably produce different results after being run despite no changes to the code. Here are two common reasons why this happens:
+  1. One of your commands requires random numbers and you forgot to use `set seed #`
+  1. You have a nonunique sort. Add `isid` checks to your code prior to sorting to ensure uniqueness. (Another option is to add the `unique` option to your sorts.) Nonunique sorts can be hard to spot:
 
 ```stata
-* The random variable r here is not unique because Stata's default type (float) does not have enough precision when N=100,000.
-* isid will therefore generate an error (unless you have changed Stata's default type to double)
+* Stata's default type is float
+* With N=100,000 a randomly generated float may not be unique
+* isid below will generate an error unless you changed Stata's default type to double
 clear
 set seed 100
 set obs 100000
@@ -405,7 +410,7 @@ isid r
 
 [Grant McDermott's data science lectures](https://github.com/uo-ec607/lectures)
 
-[Lars Vilhuber's presention on transparency and reproducibility])(https://zenodo.org/record/3735536#.XopGfqhKguU)
+[Lars Vilhuber's presention on transparency and reproducibility](https://zenodo.org/record/3735536#.XopGfqhKguU)
 
 [Roger Koenker's guide on reproducibility](http://www.econ.uiuc.edu/~roger/research/repro)
 
