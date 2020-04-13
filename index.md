@@ -334,7 +334,15 @@ You completed your analysis, wrote up your results, and are ready to submit to a
 
 1. Rerun your analysis from scratch:
 
-    - (Optional) Prior to rerunning, disable all locally installed Stata programs not located in your project folder. (This ensures your analysis is actually using the add-ons installed in your project subdirectory, rather than add-ons installed somewhere else on your machine.) On Windows, this can usually be done by renaming **c:/ado** to **c:/_ado**. You can test whether you succeeded as follows. Suppose you had previously installed `regsave` on your computer system. To confirm that it is no longer accessible after renaming **c:/ado** to **c:/_ado**, open up a new instance of Stata and type `which regsave`. Stata should report "command regsave not found". If not, Stata will report where the command is located, and you can then rename that folder by adding an underscore. Repeat until Stata can no longer find `regsave`. 
+    - Prior to rerunning, disable all locally installed Stata programs not located in your project folder. (This ensures your analysis is actually using the add-ons installed in your project subdirectory, rather than add-ons installed somewhere else on your machine.) Disabling locally installed programs can usually be accomplished by adding the following code to your master script:
+	```stata
+	cap adopath - PERSONAL
+	cap adopath - PLUS
+	cap adopath - BASE
+	cap adopath - SITE
+	cap adopath - OLDPLACE
+	```
+	You can test whether this code is sufficient as follows. Suppose you had previously installed `regsave` on your computer system. Open up a new instance of Stata, execute this code, and then type `which regsave`. Stata should report "command regsave not found". If not, Stata will report where the command is located, and you can then rename that folder by adding an underscore. Repeat until Stata can no longer find `regsave`. 
 
     - Delete the **processed/** and **results/** folders.
 
