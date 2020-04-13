@@ -419,4 +419,4 @@ isid r
 
 # Acknowledgments
 
-The coding practices outlined in this guide have been developed over many years. I would especially like to thank my frequent collaborators Tatyana Deryugina and David Molitor for providing many helpful suggestions that have improved my project organization. I also thank Grant McDermott for several helpful conversations regarding version control and reproducibility in *R*.
+The coding practices outlined in this guide have been developed over many years. I would especially like to thank my frequent collaborators Tatyana Deryugina and David Molitor for providing many helpful suggestions that have improved my project organization. I also thank Grant McDermott for several helpful conversations regarding version control and reproducibility in *R*, and thank Mauricio Bravo for helping me implement Stata syntax highlighting on GitHub Pages.
