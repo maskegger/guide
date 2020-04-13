@@ -412,6 +412,8 @@ isid r
 
 [Lars Vilhuber's presentation on transparency and reproducibility](https://zenodo.org/record/3735536#.XopGfqhKguU)
 
+[Poverty Action Stata Data and Coding Guide](https://povertyaction.github.io/guides/cleaning/readme/)
+
 [Roger Koenker's guide on reproducibility](http://www.econ.uiuc.edu/~roger/research/repro)
 
 
