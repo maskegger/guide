@@ -342,7 +342,7 @@ You completed your analysis, wrote up your results, and are ready to submit to a
 	cap adopath - SITE
 	cap adopath - OLDPLACE
 	```
-	You can test whether this code is sufficient as follows. Suppose you had previously installed `regsave` on your computer system. Open up a new instance of Stata, execute this code, and then type `which regsave`. Stata should report "command regsave not found". If not, Stata will report where the command is located, and you can then rename that folder by adding an underscore. Repeat until Stata can no longer find `regsave`. 
+	You can test whether this code is sufficient as follows. Suppose you had previously installed `regsave` on your computer system. Open a new instance of Stata, execute this code, and then type `which regsave`. Stata should report "command regsave not found". If not, Stata will report where the command is located, and you can then temporarily remove/rename that folder. Repeat until Stata can no longer find `regsave`. 
 
     - Delete the **processed/** and **results/** folders.
 
