@@ -410,7 +410,9 @@ isid r
 
 # Other helpful links
 
-[AEA Data Editor's guide](https://github.com/AEADataEditor/aea-de-guidance)
+[AEA Data Editor's guide](https://aeadataeditor.github.io/aea-de-guidance/)
+- Additional guidance at the [Social Science Data Editors site](https://social-science-data-editors.github.io/guidance/)
+
 
 [Dan Sullivan's best practices for coding](http://www.danielmsullivan.com/pages/tutorial_workflow_3bestpractice.html)
 
