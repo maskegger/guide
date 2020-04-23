@@ -338,7 +338,6 @@ You completed your analysis, wrote up your results, and are ready to submit to a
 	```stata
 	cap adopath - PERSONAL
 	cap adopath - PLUS
-	cap adopath - BASE
 	cap adopath - SITE
 	cap adopath - OLDPLACE
 	```
