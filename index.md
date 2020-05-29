@@ -129,7 +129,7 @@ At any time, you can delete **processed/** and **results/**, keeping only **data
 
 **scripts/** includes all scripts and libraries (add-on packages) required to run the analysis. **data/** includes raw (input) data and is read-only. That is, my scripts write files only to **processed/** or **results/**.
 
-**results/** contains all final output, including tables and figures. These can be linked to a LaTeX document on Overleaf or stored in an adjacent folder. For example, [MyProject](https://github.com/reifjulian/my-project) has the following folder structure:
+**results/** contains all final output, including tables and figures. These can be linked to a LaTeX document on [Overleaf](https://www.overleaf.com) or stored in an adjacent folder. For example, [MyProject](https://github.com/reifjulian/my-project) has the following folder structure:
 
 ```text
 .
@@ -309,7 +309,7 @@ replace var = "Price (1978 dollars)" if var=="price"
 list
 ```
 
-This code first removes output I didn't want to report in this table, like extraneous labels, estimates of hte constant term, and t-statistics. It then labels the four columns of estimates. As we shall see, those Stata labels will later serve as column headers. The code then rewrites `r2` using the LaTeX math syntax `\(R^2\)`. (This syntax is an alternative to the more common syntax `$R^2$`, which can cause problems because Stata uses `$` to mark global macros.) The final lines of the code provide more descriptive labels for the regressors. Typing `list` shows that our table now looks like this:
+This code first removes output I didn't want to report in this table, like extraneous labels, estimates of the constant term, and t-statistics. It then labels the four columns of estimates. As we shall see, those Stata labels will later serve as column headers. The code then rewrites `r2` using the LaTeX math syntax `\(R^2\)`. (This syntax is an alternative to the more common syntax `$R^2$`, which can cause problems because Stata uses `$` to mark global macros.) The final lines of the code provide more descriptive labels for the regressors. Typing `list` shows that our table now looks like this:
 
 <img src="assets/guide/regsave_tbl_clean.PNG" width="100%" title="Cleaned table">
 
