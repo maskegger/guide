@@ -88,7 +88,7 @@ Sys.setenv(MyProject = file.path(Sys.getenv("DROPBOX"), "my-project/analysis"))
 
 ## Version control systems
 
-Version control systems such as Git and SVN are powerful and absolutely necessary for large software development collaborations. I myself use GitHub when developing my [software packages](https://github.com/reifjulian/). However, I do not believe these systems are necessary for most academic analyses, in part because these analyses usually "end" after publication. If you're interested version control, I recommend checking out [Grant McDermott's Git slides](https://raw.githack.com/uo-ec607/lectures/master/02-git/02-Git.html#1).
+Version control systems such as Git and SVN are powerful and absolutely necessary for large software development collaborations. I myself use GitHub when developing my [software packages](https://github.com/reifjulian/). However, I do not believe these systems are necessary for most academic analyses, in part because these analyses usually "end" after publication. If you're interested in version control, I recommend checking out [Grant McDermott's Git slides](https://raw.githack.com/uo-ec607/lectures/master/02-git/02-Git.html#1).
 
 
 # Organizing the project
