@@ -35,7 +35,7 @@ Below I describe how I set up my working environment to address these challenges
 
 ## Dropbox
 
-I use Dropbox to sync my projects across environments. Dropbox has several appealing features. It creates backups of my projects across multiple computers and the Dropbox server, and in my experience has fewer bugs than alternatives such as Box. Dropbox makes it easy to share files with coauthors. All files stored on Dropbox have the same relative paths, which is helpful when writing scripts (more on this below). [Version control systems](#version_control_systems) can be used as an alternative/complement to Dropbox.
+I use Dropbox to sync my projects across environments. Dropbox has several appealing features. It creates backups of my projects across multiple computers and the Dropbox server, and in my experience has fewer bugs than alternatives such as Box. Dropbox makes it easy to share files with coauthors. All files stored on Dropbox have the same relative paths, which is helpful when writing scripts (more on this below). [Version control systems](#version_control_systems) can be used as an alternative or complement to Dropbox.
 
 ## Stata profile
 
