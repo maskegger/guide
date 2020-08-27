@@ -31,7 +31,7 @@ https://error404.atomseo.com/
 
 I work on several projects at the same time, access them from multiple computers (laptop, home, work), and share them with multiple coauthors. Using multiple environments makes it hard to define the pathname (location) of a folder. A project's location may be **/Users/jreif/my-project** on one computer and **/Users/coauthor/my-project** on another computer. You could manually change this pathname every time a different person or different computer runs the code, but this solution is cumbersome for large projects with thousands or millions of lines of code. Likewise, when you install an add-on, by default it will not be available on other computer systems.
 
-Below I describe how I set up my working environment to address these challenges. Note that users are NOT required to do this in order to run my published code. But, setting up your environment like I do will make it easier to develop your analysis in environments with multiple computers and coauthors.
+Below I describe how I set up my working environment to address these challenges. Note that users are NOT required to do this in order to run my published code. But, setting up your environment like I do will make it easier to develop your analysis in environments with multiple computers and coauthors. I focus on a setting where code is written in Stata and *R*. Stata provides native support for [Python code](https://blog.stata.com/2020/08/18/stata-python-integration-part-1-setting-up-stata-to-use-python/), which I do not discuss here.
 
 ## Dropbox
 
