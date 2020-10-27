@@ -60,11 +60,10 @@ This file contains settings specific to my PC, namely the location of my Dropbox
 Here are the contents of an example **stata_profile.do** stored on Dropbox:
 ```stata
 set varabbrev off
-set matalnum on
 global MyProject "$DROPBOX/my-project/analysis"
 ```
 
-The first line, `set varabbrev off`, is a command I want executed every time I open Stata on all my computers, for reasons [I explain below](#good_coding_practice). The second line turns on line-number tracing for Mata (helpful for debugging Mata code). The third line defines the location of the analysis for [MyProject](https://github.com/reifjulian/my-project), which I stored on Dropbox. In practice my Stata profile defines a large number of globals, one for every project I am working on. Whenever I start a new project, I define a new global for it and add it to **stata_profile.do**. Because all my computers are synced to Dropbox, I only have to do this once.
+The first line, `set varabbrev off`, is a command I want executed every time I open Stata on all my computers, for reasons [I explain below](#good_coding_practice). The second line defines the location of the analysis for [MyProject](https://github.com/reifjulian/my-project), which I stored on Dropbox. In practice my Stata profile defines a large number of globals, one for every project I am working on. Whenever I start a new project, I define a new global for it and add it to **stata_profile.do**. Because all my computers are synced to Dropbox, I only have to do this once.
 
 ## *R* profile
 
